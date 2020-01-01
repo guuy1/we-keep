@@ -40,7 +40,7 @@ const SignIn = () => {
           />
         </FormGroup>
         <Button block bsSize="large" disabled={!validateForm()} type="submit">
-          SignIn
+          Sign-In
         </Button>
         <FormGroup>
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
