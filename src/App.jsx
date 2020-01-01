@@ -1,9 +1,10 @@
 import React from "react";
+import Navbar from "./copms/Navbar";
 
 function App() {
   return (
     <div className="App">
-      <h1>House_keeping</h1>
+      <Navbar />
     </div>
   );
 }
