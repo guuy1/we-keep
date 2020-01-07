@@ -23,7 +23,6 @@ const ShoppingList = () => {
     var id = document.getElementById("showImage");
     id.appendChild(img);
     setSearch("");
-    console.log(img);
   }
   return (
     <div>

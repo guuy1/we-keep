@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Navigation from "../Navigation";
-import LandingPage from "../Landing";
-import SignUpPage from "../SignUp";
-import SignInPage from "../SignIn";
-import PasswordForgetPage from "../PasswordForget";
-import HomePage from "../Home";
-import AccountPage from "../Account";
-import AdminPage from "../Admin";
+import Navigation from "../Navigation/Navigation";
+import LandingPage from "../Landing/Landing";
+import SignUpPage from "../SignUp/SignUp";
+import SignInPage from "../SignIn/SignIn";
+import PasswordForgetPage from "../PasswordForget/PasswordForget";
+import HomePage from "../Home/Home";
+import AccountPage from "../Account/Account";
+import AdminPage from "../Admin/Admin";
 import ShoppingList from "../ShoppingList/ShoppingList";
-import SignOut from "../SignOut";
+import SignOut from "../SignOut/SignOut";
 import * as ROUTES from "../../constants/routes";
 
 const App = () => (

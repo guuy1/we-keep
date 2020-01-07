@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { Route, Link } from "react-router-dom";
-import PasswordForgetPage from "../PasswordForget";
+import PasswordForgetPage from "../PasswordForget/PasswordForget";
 import * as ROUTES from "../../constants/routes";
 import "./SignUp.css";
 
