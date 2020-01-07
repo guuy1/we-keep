@@ -12,7 +12,6 @@ import ShoppingList from "../ShoppingList/ShoppingList";
 import SignOut from "../SignOut/SignOut";
 import * as ROUTES from "../../constants/routes";
 
-
 const App = () => (
   <div>
     <Router>
