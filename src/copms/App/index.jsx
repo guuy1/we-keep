@@ -11,6 +11,7 @@ import AdminPage from "../Admin";
 import ShoppingList from "../ShoppingList/ShoppingList";
 import SignOut from "../SignOut";
 import * as ROUTES from "../../constants/routes";
+import { withAuthentication } from "../Session";
 
 const App = () => (
   <div>
@@ -31,4 +32,5 @@ const App = () => (
     </Router>
   </div>
 );
-export default App;
+
+export default withAuthentication(App);
