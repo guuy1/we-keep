@@ -28,6 +28,9 @@ const NavigationAuth = () => (
       <button className="btn btn-light m-1">
         <Link to={ROUTES.ACCOUNT}>Account</Link>
       </button>
+      <button className="btn btn-light m-1">
+        <Link to={ROUTES.ADMIN}>Admin</Link>
+      </button>
       <SignOutButton />
     </div>
   </div>
