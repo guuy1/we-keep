@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { compose } from "recompose";
+import { withAuthorization, withEmailVerification } from "../Session";
 
 const ShoppingList = () => {
   const [search, setSearch] = useState("");
@@ -53,5 +55,9 @@ const ShoppingList = () => {
     </div>
   );
 };
+const condition = authUser => !!authUser;
 
-export default ShoppingList;
+export default compose(
+  withEmailVerification,
+  withAuthorization(condition)
+)(ShoppingList);
