@@ -1,7 +1,7 @@
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { firebaseConfig } from "./config.js";
+import { firebaseConfig } from "../../config";
 
 class Firebase {
   constructor() {
