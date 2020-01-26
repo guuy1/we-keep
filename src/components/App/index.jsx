@@ -10,6 +10,7 @@ import AccountPage from "../Account";
 import AdminPage from "../Admin";
 import ShoppingList from "../ShoppingList/ShoppingList";
 import SignOut from "../SignOut";
+import CreateList from "../ShoppingList/createList";
 import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from "../Session";
 
@@ -28,6 +29,7 @@ const App = () => (
         <Route path={ROUTES.ADMIN} component={AdminPage} />
         <Route path={ROUTES.SHOPPING_LIST} component={ShoppingList} />
         <Route path={ROUTES.SIGN_OUT} component={SignOut} />
+        <Route path={ROUTES.CREATE_LIST} component={CreateList} />
       </div>
     </Router>
   </div>

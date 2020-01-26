@@ -24,7 +24,7 @@ const NavigationAuth = ({ authUser }) => (
   <div>
     <div>
       <button className="btn btn-light m-1">
-        <Link to={ROUTES.SHOPPING_LIST}>רשימת קניות</Link>
+        <Link to={ROUTES.CREATE_LIST}>רשימות קניות</Link>
       </button>
       <button className="btn btn-light m-1">
         <Link to={ROUTES.LANDING}>Landing</Link>
