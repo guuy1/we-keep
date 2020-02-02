@@ -33,10 +33,9 @@ class ListComp extends Component {
 
   componentDidMount() {
     //import the lists of user from database
+    //every time the firebase was change is update the component
     this.props.firebase.users().on("value", snapshot => {
-      console.log("something change");
       const listObject = snapshot.val();
-      debugger;
       if (listObject) {
         const userLists = listObject[this.props.authUser.uid].lists;
         if (userLists) {
