@@ -27,19 +27,22 @@ class ListComp extends Component {
     super(props);
     this.state = {
       _lists: [],
-      key: "",
-      flag: true
+      key: ""
     };
   }
 
   componentDidMount() {
     //import the lists of user from database
     this.props.firebase.users().on("value", snapshot => {
+      console.log("something change");
       const listObject = snapshot.val();
+      debugger;
       if (listObject) {
         const userLists = listObject[this.props.authUser.uid].lists;
         if (userLists) {
           this.setState({ _lists: userLists });
+        } else {
+          this.setState({ _lists: [], key: "" });
         }
       }
     });
@@ -61,7 +64,7 @@ class ListComp extends Component {
     const { _lists } = this.state;
     const lists = [..._lists, { key: listKey }];
     //set the state and after update the database
-    this.setState({ _lists: lists, key: listKey, flag: true }, () => {
+    this.setState({ _lists: lists, key: listKey }, () => {
       this.props.firebase.user(authUser.uid).set({
         username,
         email,
@@ -75,10 +78,6 @@ class ListComp extends Component {
     });
   }
 
-  showLists(_lists) {
-    console.log(_lists);
-  }
-
   handleLists(item) {
     //change the state of key list to show it
     this.setState({ key: "" }, () => {
@@ -86,27 +85,8 @@ class ListComp extends Component {
     });
   }
 
-  handleListsState() {
-    //import from database the lists of user and update the state
-    this.props.firebase.users().on("value", snapshot => {
-      const listObject = snapshot.val();
-      if (listObject) {
-        const userLists = listObject[this.props.authUser.uid].lists;
-        // console.log(userLists);//FIX IT
-        if (userLists) {
-          //update the lists in state
-          this.setState({ _lists: userLists, key: "" });
-        } else {
-          //if the user delete the last list
-          // key = "" hide the component ShoppingList from screen
-          this.setState({ _lists: [], key: "", flag: false });
-          // console.log(this.state._lists, this.state.flag); // FIX IT
-        }
-      }
-    });
-  }
   render() {
-    const { _lists, flag } = this.state;
+    const { _lists } = this.state;
     return (
       <AuthUserContext.Consumer>
         {authUser => (
@@ -119,14 +99,7 @@ class ListComp extends Component {
                 >
                   הוספת רשימה חדשה
                 </Button>
-                {/* <button
-                  className="btn btn-warning m-1"
-                  onClick={() => this.showLists(_lists)}
-                >
-                  lists
-                </button> */}
-                {flag &&
-                  _lists &&
+                {_lists.length > 0 &&
                   _lists.map((item, index) => (
                     <Button
                       key={index}

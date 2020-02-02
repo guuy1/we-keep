@@ -164,8 +164,6 @@ class ShoppingListComp extends Component {
       });
       //remove the list
       this.props.firebase.list(this.props.listKey).remove();
-      //update the state from CreateList Component
-      this.props.handleListsState();
     }
   }
 
