@@ -11,13 +11,12 @@ import Menu from "./Menu";
 import "./ShoppingList.css";
 import "font-awesome/css/font-awesome.min.css";
 
-const ShoppingList = ({ listKey, authUser, handleListsState }) => {
+const ShoppingList = ({ listKey, authUser }) => {
   return (
     <div>
       <Shopping
         listKey={listKey}
         authUser={authUser}
-        handleListsState={handleListsState}
       />
     </div>
   );

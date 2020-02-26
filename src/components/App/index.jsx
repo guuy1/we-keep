@@ -13,6 +13,7 @@ import SignOut from "../SignOut";
 import CreateList from "../ShoppingList/createList";
 import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from "../Session";
+import SearchBarcode from "../Barcode/SearchBarcode";
 
 const App = () => (
   <div>
@@ -30,6 +31,7 @@ const App = () => (
         <Route path={ROUTES.SHOPPING_LIST} component={ShoppingList} />
         <Route path={ROUTES.SIGN_OUT} component={SignOut} />
         <Route path={ROUTES.CREATE_LIST} component={CreateList} />
+        <Route path={ROUTES.BARCODE_LIST} component={SearchBarcode} />
       </div>
     </Router>
   </div>

@@ -116,7 +116,6 @@ class ListComp extends Component {
                   <ShoppingList
                     listKey={this.state.key}
                     authUser={authUser}
-                    handleListsState={() => this.handleListsState()}
                   ></ShoppingList>
                 ) : null}
               </div>

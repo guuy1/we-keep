@@ -41,7 +41,11 @@ const NavigationAuth = ({ authUser }) => (
             <Link to={ROUTES.ADMIN}>Admin</Link>
           </li>
         </button>
+        
       )}
+      <button className="btn btn-light m-1">
+        <Link to={ROUTES.BARCODE_LIST}>Barcode List</Link>
+      </button>
 
       <SignOutButton />
     </div>
