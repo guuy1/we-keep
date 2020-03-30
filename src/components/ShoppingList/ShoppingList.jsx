@@ -14,10 +14,7 @@ import "font-awesome/css/font-awesome.min.css";
 const ShoppingList = ({ listKey, authUser }) => {
   return (
     <div>
-      <Shopping
-        listKey={listKey}
-        authUser={authUser}
-      />
+      <Shopping listKey={listKey} authUser={authUser} />
     </div>
   );
 };
@@ -49,7 +46,7 @@ class ShoppingListComp extends Component {
       if (listObject && listObject[this.props.listKey]) {
         const items = listObject[this.props.listKey];
         this.setState({
-          lists: items.lists
+          lists: items.list
         });
       }
     });
@@ -84,7 +81,7 @@ class ShoppingListComp extends Component {
       //after adding the item update the datatbase
       () => {
         this.props.firebase.list(this.props.listKey).set({
-          lists: [...this.state.lists],
+          list: [...this.state.lists],
           user: [authUser.uid]
         });
       }
@@ -101,7 +98,7 @@ class ShoppingListComp extends Component {
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
-        lists: [...this.state.lists],
+        list: [...this.state.lists],
         user: [authUser.uid]
       });
     });
@@ -121,7 +118,7 @@ class ShoppingListComp extends Component {
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
-        lists: [...this.state.lists],
+        list: [...this.state.lists],
         user: [authUser.uid]
       });
     });
@@ -134,7 +131,7 @@ class ShoppingListComp extends Component {
     newItems.splice(index, 1);
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
-        lists: [...this.state.lists],
+        list: [...this.state.lists],
         user: [authUser.uid]
       });
     });

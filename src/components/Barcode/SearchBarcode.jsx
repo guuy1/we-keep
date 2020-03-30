@@ -7,9 +7,10 @@ import {
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import "bootstrap/dist/css/bootstrap.css";
+import data from "../Data/items.json";
+import { Image, List } from "semantic-ui-react";
 
 const SearchBarcode = () => {
-  
   return (
     <AuthUserContext.Consumer>
       {authUser => (
@@ -22,63 +23,128 @@ const SearchBarcode = () => {
 };
 
 class BarcodeListComp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      barCode: "",
+      itemsList: []
+    };
+  }
 
-  displayList(){
-    
-    let xmlContent = '' 
-    let tableItems = document.getElementById('items')
-    const fetch = require('node-fetch');
-    //const fileType = require('file-type');
-
-    fetch('barcodes.xml').then((response)=>{
-        response.text().then((xml)=>{
-            xmlContent = xml 
-            let parser = new DOMParser()
-            let xmlDOM = parser.parseFromString(xmlContent, 'application/xml')
-            let items = xmlDOM.querySelectorAll('ItemCode')
-            console.log(parser)
-            console.log(xmlDOM)
-            console.log(items)
-            console.log(xml)
-            items.forEach(itemXmlNode => {
-              
-                let row = document.createElement('tr')
-
-                //author
-                let td = document.createElement('td')
-                td.innerText = itemXmlNode.children[1].innerHTML
-                row.appendChild(td)
-               
-                tableItems.children[1].appendChild(row)
-                console.log(tableItems.children[1])
-                
-            });
-
-        });
+  newData(data) {
+    data.Items.Item.map(data => {
+      return console.log(data.ItemCode);
     });
   }
+
+  barCodeValidation(event) {
+    const barCodeValue = event.target.value;
+    if (barCodeValue.length > 4) return;
+    this.setState({ barCode: barCodeValue });
+  }
+
+  getItemImageURL(barcode) {
+    const url = `http://m.pricez.co.il/ProductPictures/${barcode}.jpg`;
+    return url;
+  }
+
+  searchData(data) {
+    const currentItems = data.Items.Item.filter(item => {
+      return item.ItemCode.endsWith(this.state.barCode);
+      // item.ItemCode === this.state.barCode
+    });
+
+    if (currentItems.length === 0) {
+      return;
+    }
+
+    const newItems = currentItems.map(item => {
+      const imgURL = this.getItemImageURL(item.ItemCode);
+      item.imgURL = imgURL;
+      return item;
+    });
+
+    this.setState(prevState => {
+      return { itemsList: [...prevState.itemsList, ...newItems], barCode: "" };
+    });
+  }
+
   render() {
     return (
       <AuthUserContext.Consumer>
         {authUser => (
-          <div id='content'>
-          <table id='items' cellpading='10px' className="text-align:left;">
-              <thead>
-                  <tr>
-                      <th>Barcode</th>
-                      <th>Name</th>
-                      <th>Price</th>
-                  </tr>
-              </thead>
-              <tbody>
-  
-              </tbody>
-          </table>
-          <button  className="btn btn-primary m-1"
-                  onClick={() => this.displayList()}>
-        
-          </button>
-      </div>
+          <div id="content">
+            <div className="row m-1">
+              <div className="col" id="search-section">
+                <form
+                  action=""
+                  onSubmit={e => {
+                    e.preventDefault();
+                    this.searchData(data);
+                  }}
+                >
+                  <input
+                    id="search"
+                    placeholder="Search Barcode"
+                    type="number"
+                    value={this.state.barCode}
+                    onChange={e => this.barCodeValidation(e)}
+                    required
+                  ></input>
+                  <button
+                    className="btn btn-primary m-1"
+                    type="submit"
+                    disabled={this.state.barCode.length !== 4}
+                  >
+                    Search
+                  </button>
+                </form>
+                <div></div>
+              </div>
+              <div className="col">
+                <button
+                  className="btn btn-primary m-1"
+                  onClick={() => this.newData(data)}
+                >
+                  Scan
+                </button>
+              </div>
+            </div>
+
+            <div className="row m-1">
+              {this.state.itemsList.length > 0 &&
+                this.state.itemsList.map(item => {
+                  return (
+                    <div key={item.ItemCode}>
+                      <List celled>
+                        <List.Item>
+                          <Image
+                            avatar
+                            style={{ fontSize: 50 }}
+                            src={item.imgURL}
+                            alt=""
+                          />
+                          <List.Content>
+                            <List.Header>
+                              שם המוצר : {item.ItemName}
+                            </List.Header>
+                            ברקוד: {item.ItemCode}
+                            <div>
+                              <input
+                                type="date"
+                                id="start"
+                                name="trip-start"
+                                min={new Date().toISOString().split("T")[0]}
+                              />
+                            </div>
+                          </List.Content>
+                        </List.Item>
+                      </List>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         )}
       </AuthUserContext.Consumer>
     );
