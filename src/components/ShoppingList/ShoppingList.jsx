@@ -148,6 +148,7 @@ class ShoppingListComp extends Component {
       const username = authUser.username;
       const email = authUser.email;
       const roles = authUser.roles;
+      const itemsExpirationKey = authUser.itemsExpirationKey;
       const { userLists } = this.state;
       const lists = [...userLists];
       lists.splice(index, 1);
@@ -156,7 +157,8 @@ class ShoppingListComp extends Component {
         username,
         email,
         roles,
-        lists
+        lists,
+        itemsExpirationKey
       });
       //remove the list
       this.props.firebase.list(this.props.listKey).remove();

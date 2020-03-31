@@ -70,5 +70,9 @@ class Firebase {
   // *** Lists API ***
   list = uid => this.db.ref(`lists/${uid}`);
   lists = () => this.db.ref("lists");
+
+  // *** items Expiration API ***
+  item = uid => this.db.ref(`items/${uid}`);
+  items = () => this.db.ref("items");
 }
 export default Firebase;

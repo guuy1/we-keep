@@ -33,6 +33,10 @@ class SignUpFormBase extends Component {
     if (isAdmin) {
       roles[ROLES.ADMIN] = ROLES.ADMIN;
     }
+    const itemsExpirationKey = this.props.firebase
+      .list()
+      .push()
+      .getKey();
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
@@ -40,7 +44,8 @@ class SignUpFormBase extends Component {
         return this.props.firebase.user(authUser.user.uid).set({
           username,
           email,
-          roles
+          roles,
+          itemsExpirationKey
         });
       })
       .then(() => {

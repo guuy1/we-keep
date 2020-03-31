@@ -27,8 +27,42 @@ class BarcodeListComp extends Component {
     super(props);
     this.state = {
       barCode: "",
+      key: "",
       itemsList: []
     };
+  }
+
+  componentDidMount() {
+    //import the lists of user from database
+    //every time the firebase was change is update the component
+    this.props.firebase.users().on("value", snapshot => {
+      const userObject = snapshot.val();
+      if (userObject) {
+        const userItemsKey =
+          userObject[this.props.authUser.uid].itemsExpirationKey;
+        if (userItemsKey) {
+          this.setState({ key: userItemsKey });
+        } else {
+          this.setState({ key: "" });
+        }
+      }
+    });
+
+    //import the specific list to show the items
+    this.props.firebase.items().on("value", snapshot => {
+      const itemsObject = snapshot.val();
+      if (itemsObject && itemsObject[this.state.key]) {
+        const userItems = itemsObject[this.state.key].itemsExpiration;
+        this.setState({
+          itemsList: userItems
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.users().off();
+    this.props.firebase.items().off();
   }
 
   newData(data) {
@@ -48,10 +82,24 @@ class BarcodeListComp extends Component {
     return url;
   }
 
-  searchData(data) {
+  changeDate(authUser, event, changedItem) {
+    const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
+    const currentItem = cloneItems.find(
+      item => item.ItemCode === changedItem.ItemCode
+    );
+    currentItem.expiredDate = event.target.value;
+
+    this.setState({ itemsList: cloneItems }, () => {
+      this.props.firebase.item(authUser.itemsExpirationKey).set({
+        itemsExpiration: [...this.state.itemsList],
+        user: [authUser.uid]
+      });
+    });
+  }
+
+  searchData(authUser, data) {
     const currentItems = data.Items.Item.filter(item => {
       return item.ItemCode.endsWith(this.state.barCode);
-      // item.ItemCode === this.state.barCode
     });
 
     if (currentItems.length === 0) {
@@ -61,12 +109,24 @@ class BarcodeListComp extends Component {
     const newItems = currentItems.map(item => {
       const imgURL = this.getItemImageURL(item.ItemCode);
       item.imgURL = imgURL;
+      item.expiredDate = new Date().toISOString().split("T")[0];
       return item;
     });
 
-    this.setState(prevState => {
-      return { itemsList: [...prevState.itemsList, ...newItems], barCode: "" };
-    });
+    this.setState(
+      prevState => {
+        return {
+          itemsList: [...prevState.itemsList, ...newItems],
+          barCode: ""
+        };
+      },
+      () => {
+        this.props.firebase.item(authUser.itemsExpirationKey).set({
+          itemsExpiration: [...this.state.itemsList],
+          user: [authUser.uid]
+        });
+      }
+    );
   }
 
   render() {
@@ -80,7 +140,7 @@ class BarcodeListComp extends Component {
                   action=""
                   onSubmit={e => {
                     e.preventDefault();
-                    this.searchData(data);
+                    this.searchData(authUser, data);
                   }}
                 >
                   <input
@@ -134,7 +194,11 @@ class BarcodeListComp extends Component {
                                 type="date"
                                 id="start"
                                 name="trip-start"
+                                value={item.expiredDate}
                                 min={new Date().toISOString().split("T")[0]}
+                                onChange={event =>
+                                  this.changeDate(authUser, event, item)
+                                }
                               />
                             </div>
                           </List.Content>

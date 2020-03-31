@@ -60,6 +60,7 @@ class ListComp extends Component {
     const username = authUser.username;
     const email = authUser.email;
     const roles = authUser.roles;
+    const itemsExpirationKey = authUser.itemsExpirationKey;
     const { _lists } = this.state;
     const lists = [..._lists, { key: listKey }];
     //set the state and after update the database
@@ -68,7 +69,8 @@ class ListComp extends Component {
         username,
         email,
         roles,
-        lists
+        lists,
+        itemsExpirationKey
       });
       this.props.firebase.list(listKey).set({
         lists: [],
