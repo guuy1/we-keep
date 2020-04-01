@@ -27,32 +27,17 @@ class BarcodeListComp extends Component {
     super(props);
     this.state = {
       barCode: "",
-      key: "",
       itemsList: []
     };
   }
 
   componentDidMount() {
-    //import the lists of user from database
-    //every time the firebase was change is update the component
-    this.props.firebase.users().on("value", snapshot => {
-      const userObject = snapshot.val();
-      if (userObject) {
-        const userItemsKey =
-          userObject[this.props.authUser.uid].itemsExpirationKey;
-        if (userItemsKey) {
-          this.setState({ key: userItemsKey });
-        } else {
-          this.setState({ key: "" });
-        }
-      }
-    });
-
-    //import the specific list to show the items
+    //import the Items from DB
     this.props.firebase.items().on("value", snapshot => {
       const itemsObject = snapshot.val();
-      if (itemsObject && itemsObject[this.state.key]) {
-        const userItems = itemsObject[this.state.key].itemsExpiration;
+      if (itemsObject && itemsObject[this.props.authUser.itemsExpirationKey]) {
+        const userItems =
+          itemsObject[this.props.authUser.itemsExpirationKey].itemsExpiration;
         this.setState({
           itemsList: userItems
         });
@@ -61,7 +46,6 @@ class BarcodeListComp extends Component {
   }
 
   componentWillUnmount() {
-    this.props.firebase.users().off();
     this.props.firebase.items().off();
   }
 
@@ -105,7 +89,6 @@ class BarcodeListComp extends Component {
     if (currentItems.length === 0) {
       return;
     }
-
     const newItems = currentItems.map(item => {
       const imgURL = this.getItemImageURL(item.ItemCode);
       item.imgURL = imgURL;
@@ -129,11 +112,31 @@ class BarcodeListComp extends Component {
     );
   }
 
+  handleDelete(index, authUser) {
+    //delete specific item from list
+    const { itemsList } = this.state;
+    const newItems = [...itemsList];
+    newItems.splice(index, 1);
+    if (newItems.length > 0) {
+      this.setState({ itemsList: newItems }, () => {
+        this.props.firebase.item(authUser.itemsExpirationKey).set({
+          itemsExpiration: [...this.state.itemsList],
+          user: [authUser.uid]
+        });
+      });
+    } else {
+      this.setState({ itemsList: newItems }, () => {
+        this.props.firebase.item(authUser.itemsExpirationKey).remove();
+      });
+    }
+  }
+
   render() {
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div id="content">
+            <h1 align="center">המוצרים שלי</h1>
             <div className="row m-1">
               <div className="col" id="search-section">
                 <form
@@ -173,9 +176,9 @@ class BarcodeListComp extends Component {
 
             <div className="row m-1">
               {this.state.itemsList.length > 0 &&
-                this.state.itemsList.map(item => {
+                this.state.itemsList.map((item, index) => {
                   return (
-                    <div key={item.ItemCode}>
+                    <div key={index}>
                       <List celled>
                         <List.Item>
                           <Image
@@ -201,6 +204,12 @@ class BarcodeListComp extends Component {
                                 }
                               />
                             </div>
+                            <button
+                              className="negative compact ui button m-1"
+                              onClick={() => this.handleDelete(index, authUser)}
+                            >
+                              מחק מוצר
+                            </button>
                           </List.Content>
                         </List.Item>
                       </List>
