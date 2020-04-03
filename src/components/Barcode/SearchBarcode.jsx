@@ -8,7 +8,8 @@ import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import "bootstrap/dist/css/bootstrap.css";
 import data from "../Data/items.json";
-import { Image, List } from "semantic-ui-react";
+import { Search, Image, List } from "semantic-ui-react";
+import _ from "lodash";
 
 const SearchBarcode = () => {
   return (
@@ -21,14 +22,18 @@ const SearchBarcode = () => {
     </AuthUserContext.Consumer>
   );
 };
-
+const initialState = {
+  barCode: "",
+  itemsList: [],
+  results: [],
+  value: "",
+  isLoading: false
+};
+const todayDate = new Date().toISOString().split("T")[0];
 class BarcodeListComp extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      barCode: "",
-      itemsList: []
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -51,7 +56,7 @@ class BarcodeListComp extends Component {
 
   newData(data) {
     data.Items.Item.map(data => {
-      return console.log(data.ItemCode);
+      return console.log(data.description);
     });
   }
 
@@ -66,103 +71,111 @@ class BarcodeListComp extends Component {
     return url;
   }
 
-  changeDate(authUser, event, changedItem) {
+  changeDate(event, changedItem) {
     const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
     const currentItem = cloneItems.find(
-      item => item.ItemCode === changedItem.ItemCode
+      item => item.description === changedItem.description
     );
     currentItem.expiredDate = event.target.value;
 
     this.setState({ itemsList: cloneItems }, () => {
-      this.props.firebase.item(authUser.itemsExpirationKey).set({
+      this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
         itemsExpiration: [...this.state.itemsList],
-        user: [authUser.uid]
+        user: [this.props.authUser.uid]
       });
     });
   }
 
-  searchData(authUser, data) {
-    const currentItems = data.Items.Item.filter(item => {
-      return item.ItemCode.endsWith(this.state.barCode);
-    });
-
-    if (currentItems.length === 0) {
-      return;
-    }
-    const newItems = currentItems.map(item => {
-      const imgURL = this.getItemImageURL(item.ItemCode);
-      item.imgURL = imgURL;
-      item.expiredDate = new Date().toISOString().split("T")[0];
-      return item;
-    });
-
-    this.setState(
-      prevState => {
-        return {
-          itemsList: [...prevState.itemsList, ...newItems],
-          barCode: ""
-        };
-      },
-      () => {
-        this.props.firebase.item(authUser.itemsExpirationKey).set({
-          itemsExpiration: [...this.state.itemsList],
-          user: [authUser.uid]
-        });
-      }
-    );
-  }
-
-  handleDelete(index, authUser) {
+  handleDelete(index) {
     //delete specific item from list
     const { itemsList } = this.state;
     const newItems = [...itemsList];
     newItems.splice(index, 1);
     if (newItems.length > 0) {
       this.setState({ itemsList: newItems }, () => {
-        this.props.firebase.item(authUser.itemsExpirationKey).set({
+        this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
           itemsExpiration: [...this.state.itemsList],
-          user: [authUser.uid]
+          user: [this.props.authUser.uid]
         });
       });
     } else {
       this.setState({ itemsList: newItems }, () => {
-        this.props.firebase.item(authUser.itemsExpirationKey).remove();
+        this.props.firebase
+          .item(this.props.authUser.itemsExpirationKey)
+          .remove();
       });
     }
   }
 
+  handleResultSelect = (e, { result }) => {
+    result.expiredDate = todayDate;
+    this.setState(
+      prevState => {
+        return {
+          itemsList: [...prevState.itemsList, result],
+          value: "",
+          results: []
+        };
+      },
+      () => {
+        this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
+          itemsExpiration: [...this.state.itemsList],
+          user: [this.props.authUser.uid]
+        });
+      }
+    );
+  };
+
+  handleSearchChange = (e, { value }) => {
+    this.setState({ isLoading: true, value });
+    console.log(value);
+
+    setTimeout(() => {
+      if (this.state.value.length === 0) return this.setState(initialState);
+
+      if (this.state.value.length > 3) {
+        let currentItems = data.Items.Item.filter(item => {
+          return item.ItemCode.endsWith(value);
+        });
+
+        currentItems = currentItems.map(item => {
+          const imgURL = this.getItemImageURL(item.ItemCode);
+          item.image = imgURL;
+          item.expiredDate = todayDate;
+
+          return {
+            title: item.ItemName,
+            description: item.ItemCode,
+            image: item.image
+          };
+        });
+
+        this.setState({
+          isLoading: false,
+          results: currentItems
+        });
+      }
+    }, 300);
+  };
   render() {
+    const { isLoading, value, results } = this.state;
+
     return (
       <AuthUserContext.Consumer>
-        {authUser => (
+        {() => (
           <div id="content">
             <h1 align="center">המוצרים שלי</h1>
             <div className="row m-1">
               <div className="col" id="search-section">
-                <form
-                  action=""
-                  onSubmit={e => {
-                    e.preventDefault();
-                    this.searchData(authUser, data);
-                  }}
-                >
-                  <input
-                    id="search"
-                    placeholder="Search Barcode"
-                    type="number"
-                    value={this.state.barCode}
-                    onChange={e => this.barCodeValidation(e)}
-                    required
-                  ></input>
-                  <button
-                    className="btn btn-primary m-1"
-                    type="submit"
-                    disabled={this.state.barCode.length !== 4}
-                  >
-                    Search
-                  </button>
-                </form>
-                <div></div>
+                <Search
+                  loading={isLoading}
+                  onResultSelect={this.handleResultSelect}
+                  onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                    leading: true
+                  })}
+                  results={results}
+                  value={value}
+                />
               </div>
               <div className="col">
                 <button
@@ -184,29 +197,25 @@ class BarcodeListComp extends Component {
                           <Image
                             avatar
                             style={{ fontSize: 50 }}
-                            src={item.imgURL}
+                            src={item.image}
                             alt=""
                           />
                           <List.Content>
-                            <List.Header>
-                              שם המוצר : {item.ItemName}
-                            </List.Header>
-                            ברקוד: {item.ItemCode}
+                            <List.Header>שם המוצר : {item.title}</List.Header>
+                            ברקוד: {item.description}
                             <div>
                               <input
                                 type="date"
                                 id="start"
                                 name="trip-start"
-                                value={item.expiredDate}
-                                min={new Date().toISOString().split("T")[0]}
-                                onChange={event =>
-                                  this.changeDate(authUser, event, item)
-                                }
+                                value={item.expiredDate || todayDate}
+                                min={todayDate}
+                                onChange={event => this.changeDate(event, item)}
                               />
                             </div>
                             <button
                               className="negative compact ui button m-1"
-                              onClick={() => this.handleDelete(index, authUser)}
+                              onClick={() => this.handleDelete(index)}
                             >
                               מחק מוצר
                             </button>
