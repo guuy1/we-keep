@@ -2,19 +2,20 @@ import React, { Component } from "react";
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification
+  withEmailVerification,
 } from "../Session";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import "bootstrap/dist/css/bootstrap.css";
 import data from "../Data/items.json";
+import defaultPhoto from "../Data/defaultImage.png";
 import { Search, Image, List } from "semantic-ui-react";
 import _ from "lodash";
 
 const SearchBarcode = () => {
   return (
     <AuthUserContext.Consumer>
-      {authUser => (
+      {(authUser) => (
         <div>
           <BarcodeList authUser={authUser} />
         </div>
@@ -27,7 +28,7 @@ const initialState = {
   itemsList: [],
   results: [],
   value: "",
-  isLoading: false
+  isLoading: false,
 };
 const todayDate = new Date().toISOString().split("T")[0];
 class BarcodeListComp extends Component {
@@ -38,13 +39,13 @@ class BarcodeListComp extends Component {
 
   componentDidMount() {
     //import the Items from DB
-    this.props.firebase.items().on("value", snapshot => {
+    this.props.firebase.items().on("value", (snapshot) => {
       const itemsObject = snapshot.val();
       if (itemsObject && itemsObject[this.props.authUser.itemsExpirationKey]) {
         const userItems =
           itemsObject[this.props.authUser.itemsExpirationKey].itemsExpiration;
         this.setState({
-          itemsList: userItems
+          itemsList: userItems,
         });
       }
     });
@@ -54,8 +55,32 @@ class BarcodeListComp extends Component {
     this.props.firebase.items().off();
   }
 
+  defaultImage = (e, description) => {
+    e.target.src = defaultPhoto;
+    const newResults = this.state.results.map((item) => {
+      if (description === item.description) {
+        item.image = defaultPhoto;
+      }
+      return item;
+    });
+    return this.setState({ result: newResults });
+  };
+
+  resultRenderer = ({ image, price, title, description }) => [
+    image && (
+      <div key="image" className="image">
+        <Image src={image} onError={(e) => this.defaultImage(e, description)} />
+      </div>
+    ),
+    <div key="content" className="content">
+      {price && <div className="price">{price}</div>}
+      {title && <div className="title">{title}</div>}
+      {description && <div className="description">{description}</div>}
+    </div>,
+  ];
+
   newData(data) {
-    data.Items.Item.map(data => {
+    data.Items.Item.map((data) => {
       return console.log(data.description);
     });
   }
@@ -74,14 +99,14 @@ class BarcodeListComp extends Component {
   changeDate(event, changedItem) {
     const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
     const currentItem = cloneItems.find(
-      item => item.description === changedItem.description
+      (item) => item.description === changedItem.description
     );
     currentItem.expiredDate = event.target.value;
 
     this.setState({ itemsList: cloneItems }, () => {
       this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
         itemsExpiration: [...this.state.itemsList],
-        user: [this.props.authUser.uid]
+        user: [this.props.authUser.uid],
       });
     });
   }
@@ -95,7 +120,7 @@ class BarcodeListComp extends Component {
       this.setState({ itemsList: newItems }, () => {
         this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
           itemsExpiration: [...this.state.itemsList],
-          user: [this.props.authUser.uid]
+          user: [this.props.authUser.uid],
         });
       });
     } else {
@@ -110,17 +135,17 @@ class BarcodeListComp extends Component {
   handleResultSelect = (e, { result }) => {
     result.expiredDate = todayDate;
     this.setState(
-      prevState => {
+      (prevState) => {
         return {
           itemsList: [...prevState.itemsList, result],
           value: "",
-          results: []
+          results: [],
         };
       },
       () => {
         this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
           itemsExpiration: [...this.state.itemsList],
-          user: [this.props.authUser.uid]
+          user: [this.props.authUser.uid],
         });
       }
     );
@@ -128,17 +153,16 @@ class BarcodeListComp extends Component {
 
   handleSearchChange = (e, { value }) => {
     this.setState({ isLoading: true, value });
-    console.log(value);
 
     setTimeout(() => {
       if (this.state.value.length === 0) return this.setState(initialState);
 
       if (this.state.value.length > 3) {
-        let currentItems = data.Items.Item.filter(item => {
+        let currentItems = data.Items.Item.filter((item) => {
           return item.ItemCode.endsWith(value);
         });
 
-        currentItems = currentItems.map(item => {
+        currentItems = currentItems.map((item) => {
           const imgURL = this.getItemImageURL(item.ItemCode);
           item.image = imgURL;
           item.expiredDate = todayDate;
@@ -146,13 +170,13 @@ class BarcodeListComp extends Component {
           return {
             title: item.ItemName,
             description: item.ItemCode,
-            image: item.image
+            image: item.image,
           };
         });
 
         this.setState({
           isLoading: false,
-          results: currentItems
+          results: currentItems,
         });
       }
     }, 300);
@@ -171,20 +195,21 @@ class BarcodeListComp extends Component {
                   loading={isLoading}
                   onResultSelect={this.handleResultSelect}
                   onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                    leading: true
+                    leading: true,
                   })}
                   results={results}
+                  resultRenderer={this.resultRenderer}
                   value={value}
                 />
               </div>
-              <div className="col">
+              {/* <div className="col">
                 <button
                   className="btn btn-primary m-1"
                   onClick={() => this.newData(data)}
                 >
                   Scan
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div className="row m-1">
@@ -210,7 +235,9 @@ class BarcodeListComp extends Component {
                                 name="trip-start"
                                 value={item.expiredDate || todayDate}
                                 min={todayDate}
-                                onChange={event => this.changeDate(event, item)}
+                                onChange={(event) =>
+                                  this.changeDate(event, item)
+                                }
                               />
                             </div>
                             <button
@@ -234,7 +261,7 @@ class BarcodeListComp extends Component {
 }
 
 const BarcodeList = withFirebase(BarcodeListComp);
-const condition = authUser => !!authUser;
+const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,
