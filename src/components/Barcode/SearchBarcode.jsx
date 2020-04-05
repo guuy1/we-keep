@@ -24,7 +24,6 @@ const SearchBarcode = () => {
   );
 };
 const initialState = {
-  barCode: "",
   itemsList: [],
   results: [],
   value: "",
@@ -83,12 +82,6 @@ class BarcodeListComp extends Component {
     data.Items.Item.map((data) => {
       return console.log(data.description);
     });
-  }
-
-  barCodeValidation(event) {
-    const barCodeValue = event.target.value;
-    if (barCodeValue.length > 4) return;
-    this.setState({ barCode: barCodeValue });
   }
 
   getItemImageURL(barcode) {
@@ -155,7 +148,12 @@ class BarcodeListComp extends Component {
     this.setState({ isLoading: true, value });
 
     setTimeout(() => {
-      if (this.state.value.length === 0) return this.setState(initialState);
+      if (this.state.value.length === 0)
+        return this.setState({
+          results: [],
+          value: "",
+          isLoading: false,
+        });
 
       if (this.state.value.length > 3) {
         let currentItems = data.Items.Item.filter((item) => {
