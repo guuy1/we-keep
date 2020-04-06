@@ -3,7 +3,7 @@ import { compose } from "recompose";
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification
+  withEmailVerification,
 } from "../Session";
 import { withFirebase } from "../Firebase";
 import Title from "./Title";
@@ -11,10 +11,14 @@ import Menu from "./Menu";
 import "./ShoppingList.css";
 import "font-awesome/css/font-awesome.min.css";
 
-const ShoppingList = ({ listKey, authUser }) => {
+const ShoppingList = ({ handleDeleteList, listKey, authUser }) => {
   return (
     <div>
-      <Shopping listKey={listKey} authUser={authUser} />
+      <Shopping
+        handleDeleteList={handleDeleteList}
+        listKey={listKey}
+        authUser={authUser}
+      />
     </div>
   );
 };
@@ -24,13 +28,13 @@ class ShoppingListComp extends Component {
     this.state = {
       item: "",
       lists: [],
-      userLists: []
+      userLists: [],
     };
   }
 
   componentDidMount() {
     //import the lists of user
-    this.props.firebase.users().on("value", snapshot => {
+    this.props.firebase.users().on("value", (snapshot) => {
       const listObject = snapshot.val();
       if (listObject) {
         const userLists = listObject[this.props.authUser.uid].lists;
@@ -41,13 +45,14 @@ class ShoppingListComp extends Component {
     });
 
     //import the specific list to show the items
-    this.props.firebase.lists().on("value", snapshot => {
+    this.props.firebase.lists().on("value", (snapshot) => {
       const listObject = snapshot.val();
       if (listObject && listObject[this.props.listKey]) {
-        const items = listObject[this.props.listKey];
-        this.setState({
-          lists: items.list
-        });
+        const items = listObject[this.props.listKey].list;
+        if (items)
+          this.setState({
+            lists: items,
+          });
       }
     });
   }
@@ -62,19 +67,19 @@ class ShoppingListComp extends Component {
     if (!this.state.item) return; // don't add empty item to array
     //add new item to list in state
     this.setState(
-      prevState => {
+      (prevState) => {
         if (prevState.lists) {
           return {
             lists: [
               ...prevState.lists,
-              { item: prevState.item, isComplete: false }
+              { item: prevState.item, isComplete: false },
             ],
-            item: ""
+            item: "",
           };
         } else {
           return {
             lists: [{ item: prevState.item, isComplete: false }],
-            item: ""
+            item: "",
           };
         }
       },
@@ -82,7 +87,7 @@ class ShoppingListComp extends Component {
       () => {
         this.props.firebase.list(this.props.listKey).set({
           list: [...this.state.lists],
-          user: [authUser.uid]
+          user: [authUser.uid],
         });
       }
     );
@@ -94,12 +99,12 @@ class ShoppingListComp extends Component {
     const newItems = [...lists];
     newItems.splice(index, 1, {
       item: lists[index].item,
-      isComplete: !lists[index].isComplete
+      isComplete: !lists[index].isComplete,
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
         list: [...this.state.lists],
-        user: [authUser.uid]
+        user: [authUser.uid],
       });
     });
   }
@@ -114,12 +119,12 @@ class ShoppingListComp extends Component {
     const newItems = [...lists];
     newItems.splice(index, 1, {
       item: e.target.value,
-      isComplete: lists[index].isComplete
+      isComplete: lists[index].isComplete,
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
         list: [...this.state.lists],
-        user: [authUser.uid]
+        user: [authUser.uid],
       });
     });
   }
@@ -132,7 +137,7 @@ class ShoppingListComp extends Component {
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
         list: [...this.state.lists],
-        user: [authUser.uid]
+        user: [authUser.uid],
       });
     });
   }
@@ -143,7 +148,7 @@ class ShoppingListComp extends Component {
     this.setState({ lists: [] });
     if (this.state.userLists) {
       const index = this.state.userLists.findIndex(
-        target => target.key === this.props.listKey
+        (target) => target.key === this.props.listKey
       );
       const username = authUser.username;
       const email = authUser.email;
@@ -158,9 +163,10 @@ class ShoppingListComp extends Component {
         email,
         roles,
         lists,
-        itemsExpirationKey
+        itemsExpirationKey,
       });
-      //remove the list
+      //remove the list and update the state in CreateList Comp
+      this.props.handleDeleteList(index);
       this.props.firebase.list(this.props.listKey).remove();
     }
   }
@@ -169,14 +175,14 @@ class ShoppingListComp extends Component {
     const { lists, item } = this.state;
     return (
       <AuthUserContext.Consumer>
-        {authUser => (
+        {(authUser) => (
           <div className="shopping-list">
             <div className="itemContainer">
               <Title listKey={this.props.listKey} />
               {lists &&
                 lists.map((target, index) => (
                   <form
-                    onSubmit={e => this.handleAdd(e, authUser)}
+                    onSubmit={(e) => this.handleAdd(e, authUser)}
                     className="itemsForm"
                     key={index}
                   >
@@ -192,11 +198,11 @@ class ShoppingListComp extends Component {
                       <input
                         type="text"
                         value={target.item}
-                        onChange={e =>
+                        onChange={(e) =>
                           this.handleUpdateItems(e, index, authUser)
                         }
                         style={{
-                          textDecoration: target.isComplete && "line-through"
+                          textDecoration: target.isComplete && "line-through",
                         }}
                       />
                     </div>
@@ -208,14 +214,14 @@ class ShoppingListComp extends Component {
                 ))}
 
               <form
-                onSubmit={e => this.handleAdd(e, authUser)}
+                onSubmit={(e) => this.handleAdd(e, authUser)}
                 className="itemsForm"
               >
                 <i className="fas fa-plus m-2" />
                 <input
                   type="text"
                   value={item}
-                  onChange={e => this.handleUpdateItem(e)}
+                  onChange={(e) => this.handleUpdateItem(e)}
                   placeholder="List Item"
                 />
               </form>
@@ -229,7 +235,7 @@ class ShoppingListComp extends Component {
   }
 }
 const Shopping = withFirebase(ShoppingListComp);
-const condition = authUser => !!authUser;
+const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,

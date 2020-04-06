@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification
+  withEmailVerification,
 } from "../Session";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
@@ -13,7 +13,7 @@ import { withFirebase } from "../Firebase";
 const CreatList = () => {
   return (
     <AuthUserContext.Consumer>
-      {authUser => (
+      {(authUser) => (
         <div>
           <List authUser={authUser} />
         </div>
@@ -27,14 +27,14 @@ class ListComp extends Component {
     super(props);
     this.state = {
       _lists: [],
-      key: ""
+      key: "",
     };
   }
 
   componentDidMount() {
     //import the lists of user from database
     //every time the firebase was change is update the component
-    this.props.firebase.users().on("value", snapshot => {
+    this.props.firebase.users().on("value", (snapshot) => {
       const listObject = snapshot.val();
       if (listObject) {
         const userLists = listObject[this.props.authUser.uid].lists;
@@ -51,30 +51,30 @@ class ListComp extends Component {
     this.props.firebase.users().off();
   }
 
-  handleAdd(authUser) {
+  handleAdd() {
     //generate key with firebase to the New List
-    const listKey = this.props.firebase
-      .list()
-      .push()
-      .getKey();
-    const username = authUser.username;
-    const email = authUser.email;
-    const roles = authUser.roles;
-    const itemsExpirationKey = authUser.itemsExpirationKey;
+    const listKey = this.props.firebase.list().push().getKey();
+    const username = this.props.authUser.username;
+    const email = this.props.authUser.email;
+    const roles = this.props.authUser.roles;
+    const itemsExpirationKey = this.props.authUser.itemsExpirationKey;
     const { _lists } = this.state;
     const lists = [..._lists, { key: listKey }];
     //set the state and after update the database
     this.setState({ _lists: lists, key: listKey }, () => {
-      this.props.firebase.user(authUser.uid).set({
+      this.props.firebase.user(this.props.authUser.uid).set({
         username,
         email,
         roles,
         lists,
-        itemsExpirationKey
+        itemsExpirationKey,
+      });
+      this.setState({ key: "" }, () => {
+        this.setState({ key: listKey });
       });
       this.props.firebase.list(listKey).set({
         lists: [],
-        user: [authUser.uid]
+        user: [this.props.authUser.uid],
       });
     });
   }
@@ -86,17 +86,23 @@ class ListComp extends Component {
     });
   }
 
+  handleDeleteList = (index) => {
+    const new_lists = [...this.state._lists];
+    new_lists.splice(index, 1);
+    this.setState({ _lists: new_lists, key: "" });
+  };
+
   render() {
     const { _lists } = this.state;
     return (
       <AuthUserContext.Consumer>
-        {authUser => (
+        {(authUser) => (
           <div className="container">
             <div className="row">
               <div className="col">
                 <Button
                   className="btn btn-primary m-1"
-                  onClick={() => this.handleAdd(authUser)}
+                  onClick={() => this.handleAdd()}
                 >
                   הוספת רשימה חדשה
                 </Button>
@@ -116,6 +122,7 @@ class ListComp extends Component {
               <div className="col">
                 {this.state.key ? (
                   <ShoppingList
+                    handleDeleteList={this.handleDeleteList}
                     listKey={this.state.key}
                     authUser={authUser}
                   ></ShoppingList>
@@ -130,7 +137,7 @@ class ListComp extends Component {
 }
 
 const List = withFirebase(ListComp);
-const condition = authUser => !!authUser;
+const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,
