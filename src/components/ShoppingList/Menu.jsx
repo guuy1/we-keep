@@ -5,7 +5,7 @@ import "font-awesome/css/font-awesome.min.css";
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification
+  withEmailVerification,
 } from "../Session";
 import { withFirebase } from "../Firebase";
 
@@ -21,11 +21,13 @@ class MenuComp extends Component {
   render() {
     return (
       <AuthUserContext.Consumer>
-        {authUser => (
+        {(authUser) => (
           <section className="menu">
             {/*use with Parent function to remove the list and clear the state*/}
-            <i className="far fa-trash-alt" onClick={this.props.handleRemove} />
-            <i className="far fa-clone" />
+            <i
+              className="far fa-trash-alt m-1"
+              onClick={this.props.handleRemove}
+            />
           </section>
         )}
       </AuthUserContext.Consumer>
@@ -33,7 +35,7 @@ class MenuComp extends Component {
   }
 }
 const HendleMenu = withFirebase(MenuComp);
-const condition = authUser => !!authUser;
+const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,

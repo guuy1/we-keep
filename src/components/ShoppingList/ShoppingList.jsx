@@ -29,6 +29,7 @@ class ShoppingListComp extends Component {
       item: "",
       lists: [],
       userLists: [],
+      title: "",
     };
   }
 
@@ -48,6 +49,7 @@ class ShoppingListComp extends Component {
     this.props.firebase.lists().on("value", (snapshot) => {
       const listObject = snapshot.val();
       if (listObject && listObject[this.props.listKey]) {
+        this.setState({ title: listObject[this.props.listKey].title });
         const items = listObject[this.props.listKey].list;
         if (items)
           this.setState({
@@ -86,6 +88,7 @@ class ShoppingListComp extends Component {
       //after adding the item update the datatbase
       () => {
         this.props.firebase.list(this.props.listKey).set({
+          title: this.state.title,
           list: [...this.state.lists],
           user: [authUser.uid],
         });
@@ -103,6 +106,7 @@ class ShoppingListComp extends Component {
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
+        title: this.state.title,
         list: [...this.state.lists],
         user: [authUser.uid],
       });
@@ -123,6 +127,7 @@ class ShoppingListComp extends Component {
     });
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
+        title: this.state.title,
         list: [...this.state.lists],
         user: [authUser.uid],
       });
@@ -136,6 +141,7 @@ class ShoppingListComp extends Component {
     newItems.splice(index, 1);
     this.setState({ lists: newItems }, () => {
       this.props.firebase.list(this.props.listKey).set({
+        title: this.state.title,
         list: [...this.state.lists],
         user: [authUser.uid],
       });

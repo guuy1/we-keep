@@ -75,6 +75,7 @@ class ListComp extends Component {
       this.props.firebase.list(listKey).set({
         lists: [],
         user: [this.props.authUser.uid],
+        title: "רשימת קניות",
       });
     });
   }
