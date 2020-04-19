@@ -200,14 +200,6 @@ class BarcodeListComp extends Component {
                   value={value}
                 />
               </div>
-              {/* <div className="col">
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => this.newData(data)}
-                >
-                  Scan
-                </button>
-              </div> */}
             </div>
 
             <div className="row m-1">

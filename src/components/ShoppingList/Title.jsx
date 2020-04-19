@@ -1,25 +1,3 @@
-// import React, { useState } from "react";
-// import "./Title.css";
-// import "font-awesome/css/font-awesome.min.css";
-
-// function Title({ listKey }) {
-//   const [title, setTitle] = useState("רשימת קניות");
-//   console.log("dadas");
-//   const handleTitle = (e) => setTitle(e.target.value);
-
-//   return (
-//     <input
-//       type="text"
-//       value={title}
-//       onChange={handleTitle}
-//       placeholder="Title"
-//       className="title"
-//     />
-//   );
-// }
-
-// export default Title;
-
 import React, { Component } from "react";
 import { compose } from "recompose";
 import "./Title.css";
