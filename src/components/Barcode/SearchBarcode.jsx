@@ -11,6 +11,7 @@ import data from "../Data/items.json";
 import defaultPhoto from "../Data/defaultImage.png";
 import { Search, Image, List } from "semantic-ui-react";
 import _ from "lodash";
+import Quagga from "../Quagga";
 
 const SearchBarcode = () => {
   return (
@@ -78,11 +79,33 @@ class BarcodeListComp extends Component {
     </div>,
   ];
 
-  newData(data) {
-    data.Items.Item.map((data) => {
-      return console.log(data.description);
-    });
-  }
+  scanBarcode = (result) => {
+    const imgURL = this.getItemImageURL(result.ItemCode);
+    const itemKey = this.props.firebase.item().push().getKey();
+    const res = {
+      title: result.ItemName,
+      description: result.ItemCode,
+      image: imgURL,
+      expiredDate: todayDate,
+      itemKey: itemKey,
+    };
+
+    this.setState(
+      (prevState) => {
+        return {
+          itemsList: [...prevState.itemsList, res],
+          value: "",
+          results: [],
+        };
+      },
+      () => {
+        this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
+          itemsExpiration: [...this.state.itemsList],
+          user: [this.props.authUser.uid],
+        });
+      }
+    );
+  };
 
   getItemImageURL(barcode) {
     const url = `http://m.pricez.co.il/ProductPictures/${barcode}.jpg`;
@@ -92,7 +115,7 @@ class BarcodeListComp extends Component {
   changeDate(event, changedItem) {
     const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
     const currentItem = cloneItems.find(
-      (item) => item.description === changedItem.description
+      (item) => item.itemKey === changedItem.itemKey
     );
     currentItem.expiredDate = event.target.value;
 
@@ -126,7 +149,9 @@ class BarcodeListComp extends Component {
   }
 
   handleResultSelect = (e, { result }) => {
+    const itemKey = this.props.firebase.item().push().getKey();
     result.expiredDate = todayDate;
+    result.itemKey = itemKey;
     this.setState(
       (prevState) => {
         return {
@@ -199,6 +224,9 @@ class BarcodeListComp extends Component {
                   resultRenderer={this.resultRenderer}
                   value={value}
                 />
+              </div>
+              <div className="col">
+                <Quagga scanBarcode={this.scanBarcode} />
               </div>
             </div>
 
