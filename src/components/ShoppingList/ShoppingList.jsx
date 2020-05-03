@@ -185,52 +185,52 @@ class ShoppingListComp extends Component {
           <div className="shopping-list">
             <div className="itemContainer">
               <Title listKey={this.props.listKey} />
-              {lists &&
-                lists.map((target, index) => (
-                  <form
-                    onSubmit={(e) => this.handleAdd(e, authUser)}
-                    className="itemsForm"
-                    key={index}
-                  >
-                    <div>
-                      <i
-                        className={
-                          target.isComplete
-                            ? "far fa-check-square m-1"
-                            : "far fa-square m-1"
-                        }
-                        onClick={() => this.handleComplete(index, authUser)}
-                      />
-                      <input
-                        type="text"
-                        value={target.item}
-                        onChange={(e) =>
-                          this.handleUpdateItems(e, index, authUser)
-                        }
-                        style={{
-                          textDecoration: target.isComplete && "line-through",
-                        }}
-                      />
-                    </div>
-                    <i
-                      className="fas fa-times"
-                      onClick={() => this.handleDelete(index, authUser)}
-                    />
-                  </form>
-                ))}
-
               <form
                 onSubmit={(e) => this.handleAdd(e, authUser)}
                 className="itemsForm"
               >
-                <i className="fas fa-plus m-2" />
                 <input
                   type="text"
                   value={item}
                   onChange={(e) => this.handleUpdateItem(e)}
-                  placeholder="List Item"
+                  placeholder="מוצר חדש"
                 />
               </form>
+              {lists &&
+                lists
+                  .sort((a, b) => a.isComplete - b.isComplete)
+                  .map((target, index) => (
+                    <form
+                      onSubmit={(e) => this.handleAdd(e, authUser)}
+                      className="itemsForm"
+                      key={index}
+                    >
+                      <div>
+                        <i
+                          className={
+                            target.isComplete
+                              ? "far fa-check-square m-1"
+                              : "far fa-square m-1"
+                          }
+                          onClick={() => this.handleComplete(index, authUser)}
+                        />
+                        <input
+                          type="text"
+                          value={target.item}
+                          onChange={(e) =>
+                            this.handleUpdateItems(e, index, authUser)
+                          }
+                          style={{
+                            textDecoration: target.isComplete && "line-through",
+                          }}
+                        />
+                      </div>
+                      <i
+                        className="fas fa-times"
+                        onClick={() => this.handleDelete(index, authUser)}
+                      />
+                    </form>
+                  ))}
               <hr />
               <Menu handleRemove={() => this.handleRemove(authUser)} />
             </div>
