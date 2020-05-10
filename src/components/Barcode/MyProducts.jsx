@@ -7,31 +7,31 @@ import {
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import "bootstrap/dist/css/bootstrap.css";
+import data from "../Data/items.json";
 import defaultPhoto from "../Data/defaultImage.png";
-import { Image, List } from "semantic-ui-react";
-import Quagga from "../Quagga";
+import { Search, Image, List } from "semantic-ui-react";
+import _ from "lodash";
 
-const SearchBarcode = () => {
+const MyProducts = () => {
   return (
     <AuthUserContext.Consumer>
       {(authUser) => (
         <div>
-          <ScanBarcode authUser={authUser} />
+          <BarcodeList authUser={authUser} />
         </div>
       )}
     </AuthUserContext.Consumer>
   );
 };
 const initialState = {
-  newItems: [],
   itemsList: [],
   results: [],
   value: "",
   isLoading: false,
-  isInvalid: true,
+  notify: false,
 };
 const todayDate = new Date().toISOString().split("T")[0];
-class ScanBarcodeComp extends Component {
+class BarcodeListComp extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -79,25 +79,9 @@ class ScanBarcodeComp extends Component {
     </div>,
   ];
 
-  scanBarcode = (result) => {
-    const imgURL = this.getItemImageURL(result.ItemCode);
-    const itemKey = this.props.firebase.item().push().getKey();
-    const res = {
-      title: result.ItemName,
-      description: result.ItemCode,
-      image: imgURL,
-      expiredDate: todayDate,
-      itemKey: itemKey,
-    };
-    this.setState((prevState) => {
-      return {
-        newItems: [...prevState.newItems, res],
-        value: "",
-        results: [],
-        isInvalid: false,
-      };
-    });
-  };
+  // handleNotify() {
+  //   this.setState({ notify: !this.state.notify });
+  // }
 
   getItemImageURL(barcode) {
     const url = `http://m.pricez.co.il/ProductPictures/${barcode}.jpg`;
@@ -105,36 +89,51 @@ class ScanBarcodeComp extends Component {
   }
 
   changeDate(event, changedItem) {
-    const cloneItems = JSON.parse(JSON.stringify(this.state.newItems));
+    const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
     const currentItem = cloneItems.find(
       (item) => item.itemKey === changedItem.itemKey
     );
     currentItem.expiredDate = event.target.value;
-    this.setState({ newItems: cloneItems });
+
+    this.setState({ itemsList: cloneItems }, () => {
+      this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
+        itemsExpiration: [...this.state.itemsList],
+        user: [this.props.authUser.uid],
+      });
+    });
   }
 
   handleDelete(index) {
     //delete specific item from list
-    const { newItems } = this.state;
-    const newI = [...newItems];
-    newI.splice(index, 1);
-    if (newI.length > 0) {
-      this.setState({ newItems: newI });
+    const { itemsList } = this.state;
+    const newItems = [...itemsList];
+    newItems.splice(index, 1);
+    if (newItems.length > 0) {
+      this.setState({ itemsList: newItems }, () => {
+        this.props.firebase.item(this.props.authUser.itemsExpirationKey).set({
+          itemsExpiration: [...this.state.itemsList],
+          user: [this.props.authUser.uid],
+        });
+      });
     } else {
-      this.setState({ newItems: newI, isInvalid: true });
+      this.setState({ itemsList: newItems }, () => {
+        this.props.firebase
+          .item(this.props.authUser.itemsExpirationKey)
+          .remove();
+      });
     }
   }
 
-  handleAdd() {
-    const { newItems } = this.state;
-    const newI = [...newItems];
+  handleResultSelect = (e, { result }) => {
+    const itemKey = this.props.firebase.item().push().getKey();
+    result.expiredDate = todayDate;
+    result.itemKey = itemKey;
     this.setState(
       (prevState) => {
         return {
-          itemsList: [...prevState.itemsList, ...newI],
+          itemsList: [...prevState.itemsList, result],
           value: "",
           results: [],
-          newItems: [],
         };
       },
       () => {
@@ -144,32 +143,70 @@ class ScanBarcodeComp extends Component {
         });
       }
     );
-  }
+  };
 
+  handleSearchChange = (e, { value }) => {
+    this.setState({ isLoading: true, value });
+
+    setTimeout(() => {
+      if (this.state.value.length === 0)
+        return this.setState({
+          results: [],
+          value: "",
+          isLoading: false,
+        });
+
+      if (this.state.value.length > 3) {
+        let currentItems = data.Items.Item.filter((item) => {
+          return item.ItemCode.endsWith(value);
+        });
+
+        currentItems = currentItems.map((item) => {
+          const imgURL = this.getItemImageURL(item.ItemCode);
+          item.image = imgURL;
+          item.expiredDate = todayDate;
+
+          return {
+            title: item.ItemName,
+            description: item.ItemCode,
+            image: item.image,
+          };
+        });
+
+        this.setState({
+          isLoading: false,
+          results: currentItems,
+        });
+      }
+    }, 300);
+  };
   render() {
+    const { isLoading, value, results /*notify*/ } = this.state;
+
     return (
       <AuthUserContext.Consumer>
         {() => (
           <div id="content">
-            <h1 align="center">מוצרים שנסרקו</h1>
+            <h1 align="center">המוצרים שלי</h1>
             <div className="row m-1">
-              <div className="col">
-                <Quagga scanBarcode={this.scanBarcode} />
-              </div>
-              <div className="col">
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => this.handleAdd()}
-                  disabled={this.state.isInvalid}
-                >
-                  הוסף למוצרים שלי
-                </button>
+              <div className="col" id="search-section">
+                <Search
+                  loading={isLoading}
+                  onResultSelect={this.handleResultSelect}
+                  onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                    leading: true,
+                  })}
+                  results={results}
+                  resultRenderer={this.resultRenderer}
+                  value={value}
+                  placeholder="ארבע ספרות אחרונות"
+                />
               </div>
             </div>
 
             <div className="row m-1">
-              {this.state.newItems.length > 0 &&
-                this.state.newItems.map((item, index) => {
+              {this.state.itemsList.length > 0 &&
+                this.state.itemsList.map((item, index) => {
                   return (
                     <div key={index}>
                       <List celled>
@@ -201,6 +238,17 @@ class ScanBarcodeComp extends Component {
                             >
                               מחק מוצר
                             </button>
+                            {/* {notify ? (
+                              <i
+                                className="fas fa-bell-slash"
+                                onClick={() => this.handleNotify()}
+                              ></i>
+                            ) : (
+                              <i
+                                className="fas fa-bell"
+                                onClick={() => this.handleNotify()}
+                              ></i>
+                            )} */}
                           </List.Content>
                         </List.Item>
                       </List>
@@ -215,10 +263,10 @@ class ScanBarcodeComp extends Component {
   }
 }
 
-const ScanBarcode = withFirebase(ScanBarcodeComp);
+const BarcodeList = withFirebase(BarcodeListComp);
 const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,
   withAuthorization(condition)
-)(SearchBarcode);
+)(MyProducts);

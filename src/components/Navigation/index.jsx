@@ -9,7 +9,7 @@ import * as ROLES from "../../constants/roles";
 const Navigation = () => (
   <div>
     <AuthUserContext.Consumer>
-      {authUser =>
+      {(authUser) =>
         authUser ? (
           <NavigationAuth authUser={authUser} />
         ) : (
@@ -41,12 +41,13 @@ const NavigationAuth = ({ authUser }) => (
             <Link to={ROUTES.ADMIN}>Admin</Link>
           </li>
         </button>
-        
       )}
       <button className="btn btn-light m-1">
-        <Link to={ROUTES.BARCODE_LIST}>Barcode List</Link>
+        <Link to={ROUTES.MY_PRODUCTS}>המוצרים שלי</Link>
       </button>
-
+      <button className="btn btn-light m-1">
+        <Link to={ROUTES.SCAN_BARCODE}>Scan</Link>
+      </button>
       <SignOutButton />
     </div>
   </div>
