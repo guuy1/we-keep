@@ -1,0 +1,43 @@
+.about-us {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+
+  .title {
+    justify-content: space-between;
+    margin: 10px 0;
+    color: blue;
+    font-size: 50px;
+  }
+  .sub {
+    color: rgb(25, 45, 223);
+    font-size: 20px;
+  }
+
+  .sub1 {
+    color: rgb(103, 141, 212);
+    font-size: 25px;
+  }
+  .button {
+    min-width: 165px;
+    width: auto;
+    height: 50px;
+    letter-spacing: 0.5px;
+    line-height: 50px;
+    padding: 0 35px 0 35px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.938);
+    color: black;
+    text-transform: uppercase;
+    font-family: "Open Sans Condensed";
+    font-weight: bolder;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(142, 167, 247);
+      color: black;
+      border: 1px solid black;
+    }
+  }
+}

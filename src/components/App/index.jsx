@@ -15,7 +15,7 @@ import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from "../Session";
 import SearchBarcode from "../Barcode/SearchBarcode";
 import MyProducts from "../Barcode/MyProducts";
-
+import "./App.css";
 const App = () => (
   <div>
     <Router>

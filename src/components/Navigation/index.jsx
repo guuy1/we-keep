@@ -4,8 +4,16 @@ import * as ROUTES from "../../constants/routes";
 import SignOutButton from "../SignOut";
 import "bootstrap/dist/css/bootstrap.css";
 import { AuthUserContext } from "../Session";
-import * as ROLES from "../../constants/roles";
+// import * as ROLES from "../../constants/roles";
+import { ReactComponent as Logo } from "../Data/crown.svg";
 
+import {
+  HeaderContainer,
+  LogoContainer,
+  OptionsContainer,
+  OptionLink,
+  Option1Link,
+} from "./Navigation.styles";
 const Navigation = () => (
   <div>
     <AuthUserContext.Consumer>
@@ -21,49 +29,37 @@ const Navigation = () => (
 );
 
 const NavigationAuth = ({ authUser }) => (
-  <div>
-    <div>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.CREATE_LIST}>רשימות קניות</Link>
-      </button>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.LANDING}>Landing</Link>
-      </button>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.HOME}>Home</Link>
-      </button>
-      <button className="btn btn-light m-1">
+  <HeaderContainer>
+    <LogoContainer to={ROUTES.HOME}>
+      <Logo className="logo" />
+    </LogoContainer>
+    <OptionsContainer>
+      <Option1Link to={ROUTES.HOME}>WeKeep</Option1Link>
+      <OptionLink>
         <Link to={ROUTES.ACCOUNT}>Account</Link>
-      </button>
-      {!!authUser.roles[ROLES.ADMIN] && (
+      </OptionLink>
+      {/* {!!authUser.roles[ROLES.ADMIN] && (
         <button className="btn btn-light m-1">
           <li>
             <Link to={ROUTES.ADMIN}>Admin</Link>
           </li>
         </button>
-      )}
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.MY_PRODUCTS}>המוצרים שלי</Link>
-      </button>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.SCAN_BARCODE}>Scan</Link>
-      </button>
+      )} */}
       <SignOutButton />
-    </div>
-  </div>
+    </OptionsContainer>
+  </HeaderContainer>
 );
 
 const NavigationNonAuth = () => (
-  <div>
-    <div>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.LANDING}>Landing</Link>
-      </button>
-      <button className="btn btn-light m-1">
-        <Link to={ROUTES.SIGN_IN}>כניסה</Link>
-      </button>
-    </div>
-  </div>
+  <HeaderContainer>
+    <LogoContainer to={ROUTES.LANDING}>
+      <Logo className="logo" />
+    </LogoContainer>
+    <OptionsContainer>
+      <Option1Link>WeKeep</Option1Link>
+      <OptionLink to={ROUTES.SIGN_IN}>SIGN-IN</OptionLink>
+    </OptionsContainer>
+  </HeaderContainer>
 );
 
 export default Navigation;

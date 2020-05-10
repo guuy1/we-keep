@@ -4,6 +4,8 @@ import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
+import FormInput from "../FormInput/FormInput";
+import CustomButton from "../CustomButton/CustomButton";
 
 const SignUpPage = () => (
   <div>
@@ -74,28 +76,28 @@ class SignUpFormBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <input
+        <FormInput
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"
         />
-        <input
+        <FormInput
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
         />
-        <input
+        <FormInput
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
           placeholder="Password"
         />
-        <input
+        <FormInput
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
@@ -111,9 +113,9 @@ class SignUpFormBase extends Component {
             onChange={this.onChangeCheckbox}
           />
         </label> */}
-        <button disabled={isInvalid} type="submit">
+        <CustomButton disabled={isInvalid} type="submit">
           Sign Up
-        </button>
+        </CustomButton>
         {error && <p>{error.message}</p>}
       </form>
     );
