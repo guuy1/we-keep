@@ -2,6 +2,9 @@ import React from "react";
 import MenuItem from "../MenuItem/menuItem";
 import "./directory.scss";
 import * as ROUTES from "../../constants/routes";
+import listImg from "../Data/list.jpg";
+import productsImg from "../Data/products.jpg";
+import scanImg from "../Data/scan.jpeg";
 class Directory extends React.Component {
   constructor() {
     super();
@@ -11,24 +14,21 @@ class Directory extends React.Component {
         {
           title: "my lists",
           subtitle: "TAKE A LOOK AT YOYR LISTS",
-          imageUrl:
-            "https://arc-trs-savvy.s3.amazonaws.com/uploads/2016/11/6.2_Meal-plan-and-shopping-list-on-fridge-1024x682.jpg",
+          imageUrl: listImg,
           id: 1,
           linkUrl: ROUTES.CREATE_LIST,
         },
         {
           title: "my products",
           subtitle: "TAKE A LOOK AT YOYR PRODUCTS",
-          imageUrl:
-            "http://www.brockpress.com/wp-content/uploads/2019/03/istockphoto-855098134-612x612-300x200.jpg",
+          imageUrl: productsImg,
           id: 2,
           linkUrl: ROUTES.MY_PRODUCTS,
         },
         {
           title: "new scan",
           subtitle: "ADD A NEW PRODUCTS",
-          imageUrl:
-            "https://cdn-images-1.medium.com/max/640/1*RTSUD26ntrTxfOvcJezftw.jpeg",
+          imageUrl: scanImg,
           id: 3,
           linkUrl: ROUTES.SCAN_BARCODE,
         },
