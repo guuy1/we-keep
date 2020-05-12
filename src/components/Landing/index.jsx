@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Landing.scss";
+import * as ROUTES from "../../constants/routes";
 
 class Landing extends React.Component {
   render() {
@@ -16,7 +17,7 @@ class Landing extends React.Component {
           management of the household, such as a grocery shopping list
         </h3>
         <h3 className="sub1">Join Us And Make Your Life More Organized </h3>
-        <Link to="/signup">
+        <Link to={ROUTES.SIGN_UP}>
           <button className="button" type="button">
             sign up now
           </button>
