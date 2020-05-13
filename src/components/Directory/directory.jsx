@@ -12,22 +12,22 @@ class Directory extends React.Component {
     this.state = {
       sections: [
         {
-          title: "my lists",
-          subtitle: "TAKE A LOOK AT YOYR LISTS",
+          title: "הרשימות שלי",
+          subtitle: "הוסף וערוך רשימות",
           imageUrl: listImg,
           id: 1,
           linkUrl: ROUTES.CREATE_LIST,
         },
         {
-          title: "my products",
-          subtitle: "TAKE A LOOK AT YOYR PRODUCTS",
+          title: "המוצרים שלי",
+          subtitle: "בדוק תוקף מוצריך",
           imageUrl: productsImg,
           id: 2,
           linkUrl: ROUTES.MY_PRODUCTS,
         },
         {
-          title: "new scan",
-          subtitle: "ADD A NEW PRODUCTS",
+          title: "סרוק מוצר",
+          subtitle: "הוסף מוצר חדש ותוקפו",
           imageUrl: scanImg,
           id: 3,
           linkUrl: ROUTES.SCAN_BARCODE,

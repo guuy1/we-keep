@@ -26,6 +26,7 @@ export const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+  background-color: #1c1b1b;
 `;
 
 export const LogoContainer = styled(Link)`

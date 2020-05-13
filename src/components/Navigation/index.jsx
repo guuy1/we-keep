@@ -1,4 +1,5 @@
 import React from "react";
+
 import * as ROUTES from "../../constants/routes";
 import SignOutButton from "../SignOut";
 import "bootstrap/dist/css/bootstrap.css";
@@ -34,8 +35,9 @@ const NavigationAuth = ({ authUser }) => (
     </LogoContainer>
     <OptionsContainer>
       <Option1Link to={ROUTES.HOME}>WeKeep</Option1Link>
-      <OptionLink to={ROUTES.ACCOUNT}>Account </OptionLink>
-      {/* {!!authUser.roles[ROLES.ADMIN] && (
+      <OptionLink to={ROUTES.ACCOUNT}>החשבון שלי</OptionLink>
+
+      {/* {!!authUser.roles[ROLES.ADMIN] && ( 
         <button className="btn btn-light m-1">
           <li>
             <Link to={ROUTES.ADMIN}>Admin</Link>
@@ -54,7 +56,7 @@ const NavigationNonAuth = () => (
     </LogoContainer>
     <OptionsContainer>
       <Option1Link to={ROUTES.LANDING}>WeKeep</Option1Link>
-      <OptionLink to={ROUTES.SIGN_IN}>SIGN-IN</OptionLink>
+      <OptionLink to={ROUTES.SIGN_IN}>התחבר</OptionLink>
     </OptionsContainer>
   </HeaderContainer>
 );

@@ -6,7 +6,7 @@ import { OptionLink } from "../Navigation/Navigation.styles";
 
 const SignOutButton = ({ firebase }) => (
   <OptionLink type="button" onClick={firebase.doSignOut} to={ROUTES.LANDING}>
-    SIGN OUT{" "}
+    התנתק
   </OptionLink>
 );
 export default withFirebase(SignOutButton);

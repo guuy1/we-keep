@@ -8,6 +8,11 @@
   border: 2px solid lightblue;
   margin: 0 7.5px 15px;
   overflow: hidden;
+  position: relative;
+
+  @media screen and(max-width: 800px) {
+    height: 200px;
+  }
 
   &:hover {
     cursor: pointer;
@@ -39,6 +44,8 @@
 
   .content {
     height: 90px;
+    width: 200px;
+    top: 40%;
     padding: 0 25px;
     display: flex;
     flex-direction: column;
@@ -49,11 +56,19 @@
     opacity: 0.7;
     position: absolute;
 
+    @media screen and(max-width: 800px) {
+      width: 150px;
+      top: 30%;
+    }
+
     .title {
       font-weight: bold;
+      width: max-content;
+      background-color: white;
       margin: 0 6px 0;
       font-size: 25px;
       color: black;
+      text-align: center;
     }
 
     .subtitle {

@@ -11,6 +11,7 @@ import data from "../Data/items.json";
 import defaultPhoto from "../Data/defaultImage.png";
 import { Search, Image, List } from "semantic-ui-react";
 import _ from "lodash";
+import "./MyProducts.scss";
 
 const MyProducts = () => {
   return (
@@ -191,6 +192,7 @@ class BarcodeListComp extends Component {
             <div className="row m-1">
               <div className="col" id="search-section">
                 <Search
+                  className="search"
                   loading={isLoading}
                   onResultSelect={this.handleResultSelect}
                   onSearchChange={_.debounce(this.handleSearchChange, 500, {

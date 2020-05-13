@@ -15,13 +15,14 @@ import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from "../Session";
 import SearchBarcode from "../Barcode/SearchBarcode";
 import MyProducts from "../Barcode/MyProducts";
-import "./App.css";
+import { GlobalStyle } from "../../global.styles";
 const App = () => (
   <div>
     <Router>
       <div>
+        <GlobalStyle />
         <Navigation />
-        <hr />
+        {/* <hr /> */}
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
         <Route path={ROUTES.SIGN_IN} component={SignInPage} />
