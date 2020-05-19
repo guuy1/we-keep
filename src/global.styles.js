@@ -10,11 +10,16 @@ body {
   
   a {
     text-decoration: none;
-    color: white;
+    color: whitesmoke;
   }
   
+  p {
+    direction: rtl ;
+  }
+
   * {
     box-sizing: border-box;
   }
-  
+
+
 `;

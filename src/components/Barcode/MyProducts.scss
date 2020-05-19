@@ -2,3 +2,15 @@ h1 {
   font-family: "Amatic SC";
   color: #007bff;
 }
+
+.ui.input > input {
+  text-align: right !important;
+}
+
+.ui.search {
+  margin-left: 38% !important;
+
+  @media screen and(max-width: 800px) {
+    margin-left: 20% !important;
+  }
+}

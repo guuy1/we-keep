@@ -10,42 +10,59 @@
   }
 
   .title {
+    width: auto;
     justify-content: space-between;
     margin: 10px 0;
-    color: blue;
+    color: #99ccff;
     font-size: 50px;
+    text-align: center;
   }
   .sub {
-    color: rgb(25, 45, 223);
+    text-align: right;
+    color: #1a8cff;
     font-size: 25px;
     font-family: "Amatic SC";
+    direction: rtl;
+  }
+  .sub1 {
+    text-align: right;
+    color: #0073e6;
+    font-size: 25px;
+    font-family: "Amatic SC";
+    direction: rtl;
   }
 
-  .sub1 {
-    color: rgb(103, 141, 212);
+  .sub2 {
+    text-align: right;
+    direction: rtl;
+    color: #0066cc;
     font-size: 30px;
     font-family: "Amatic SC";
   }
-  .button {
-    min-width: 165px;
-    width: auto;
-    height: 50px;
-    letter-spacing: 0.5px;
-    line-height: 50px;
-    padding: 0 35px 0 35px;
-    font-size: 15px;
-    background-color: rgba(255, 255, 255, 0.938);
-    color: black;
-    text-transform: uppercase;
-    font-family: "Open Sans Condensed";
-    font-weight: bolder;
-    border: none;
-    cursor: pointer;
 
-    &:hover {
-      background-color: rgb(142, 167, 247);
-      color: black;
-      border: 1px solid black;
-    }
+  .link {
+    margin: auto;
   }
+  // .button {
+  //   min-width: 165px;
+  //   width: auto;
+  //   height: 50px;
+  //   letter-spacing: 0.5px;
+  //   line-height: 50px;
+  //   padding: 0 35px 0 35px;
+  //   font-size: 15px;
+  //   background-color: rgba(255, 255, 255, 0.938);
+  //   color: black;
+  //   text-transform: uppercase;
+  //   font-family: "Open Sans Condensed";
+  //   font-weight: bolder;
+  //   border: none;
+  //   cursor: pointer;
+
+  //   &:hover {
+  //     background-color: rgb(142, 167, 247);
+  //     color: black;
+  //     border: 1px solid black;
+  //   }
+  // }
 }

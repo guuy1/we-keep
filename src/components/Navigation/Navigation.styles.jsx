@@ -3,18 +3,19 @@ import { Link } from "react-router-dom";
 
 const OptionContainerStyles = css`
   padding: 10px 15px;
-  font-size: 18px;
+  font-size: 25px;
   cursor: pointer;
 
   @media screen and (max-width: 800px) {
-    font-size: 12px;
+    font-size: 18px;
+    font-weight: bold;
   }
 `;
 
 const Option1ContainerStyles = css`
   color: rgb(80, 233, 162);
   font-weight: bold;
-  font-size: 30px;
+  font-size: 40px;
   @media screen and (max-width: 800px) {
     font-size: 20px;
   }

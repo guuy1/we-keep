@@ -6,10 +6,16 @@ import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
 import FormInput from "../FormInput/FormInput";
 import CustomButton from "../CustomButton/CustomButton";
+import styled from "styled-components";
+
+const LinkStyled = styled(Link)`
+  color: #006666;
+`;
 
 const SignUpPage = () => (
   <div>
-    <h1>SignUp</h1>
+    <h1>הרשמה - משתמש חדש</h1>
+    <p>Sign Up</p>
     <SignUpForm />
   </div>
 );
@@ -75,34 +81,34 @@ class SignUpFormBase extends Component {
       username === "";
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form className="form" onSubmit={this.onSubmit}>
         <FormInput
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="שם מלא"
         />
         <FormInput
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
-          placeholder="Email Address"
+          placeholder="כתובת איימיל"
         />
         <FormInput
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
-          placeholder="Password"
+          placeholder="סיסמא"
         />
         <FormInput
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
           type="password"
-          placeholder="Confirm Password"
+          placeholder="וידוא סיסמא"
         />
         {/* <label>
           Admin:
@@ -114,7 +120,7 @@ class SignUpFormBase extends Component {
           />
         </label> */}
         <CustomButton disabled={isInvalid} type="submit">
-          Sign Up
+          הרשמה
         </CustomButton>
         {error && <p>{error.message}</p>}
       </form>
@@ -123,7 +129,10 @@ class SignUpFormBase extends Component {
 }
 const SignUpLink = () => (
   <p>
-    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    משתמש חדש?{" "}
+    <LinkStyled className="link" to={ROUTES.SIGN_UP}>
+      הירשם עכשיו
+    </LinkStyled>
   </p>
 );
 

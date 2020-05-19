@@ -10,6 +10,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import defaultPhoto from "../Data/defaultImage.png";
 import { Image, List } from "semantic-ui-react";
 import Quagga from "../Quagga";
+import * as ROUTES from "../../constants/routes";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const Input = styled.div`
+  font-family: "Heebo";
+`;
 
 const SearchBarcode = () => {
   return (
@@ -152,9 +159,13 @@ class ScanBarcodeComp extends Component {
         {() => (
           <div id="content">
             <h1 align="center">מוצרים שנסרקו</h1>
-            <div className="row m-1">
-              <div className="col">
-                <Quagga scanBarcode={this.scanBarcode} />
+            <div className="row">
+              <div className="col m-1 ">
+                <Link to={ROUTES.MY_PRODUCTS}>
+                  <button className="btn btn-primary m-1">
+                    עבור למוצרים שלי
+                  </button>
+                </Link>
               </div>
               <div className="col">
                 <button
@@ -164,6 +175,9 @@ class ScanBarcodeComp extends Component {
                 >
                   הוסף למוצרים שלי
                 </button>
+              </div>
+              <div className="col">
+                <Quagga scanBarcode={this.scanBarcode} />
               </div>
             </div>
 
@@ -183,7 +197,7 @@ class ScanBarcodeComp extends Component {
                           <List.Content>
                             <List.Header>שם המוצר : {item.title}</List.Header>
                             ברקוד: {item.description}
-                            <div>
+                            <Input>
                               <input
                                 type="date"
                                 id="start"
@@ -194,7 +208,7 @@ class ScanBarcodeComp extends Component {
                                   this.changeDate(event, item)
                                 }
                               />
-                            </div>
+                            </Input>
                             <button
                               className="negative compact ui button m-1"
                               onClick={() => this.handleDelete(index)}

@@ -8,7 +8,7 @@ import {
 import { withFirebase } from "../Firebase";
 import Title from "./Title";
 import Menu from "./Menu";
-import "./ShoppingList.css";
+import "./ShoppingList.scss";
 import "font-awesome/css/font-awesome.min.css";
 
 const ShoppingList = ({ handleDeleteList, listKey, authUser }) => {
@@ -200,36 +200,40 @@ class ShoppingListComp extends Component {
                 lists
                   .sort((a, b) => a.isComplete - b.isComplete)
                   .map((target, index) => (
-                    <form
-                      onSubmit={(e) => this.handleAdd(e, authUser)}
-                      className="itemsForm"
-                      key={index}
-                    >
-                      <div>
+                    <div>
+                      <form
+                        onSubmit={(e) => this.handleAdd(e, authUser)}
+                        className="itemsForm"
+                        key={index}
+                      >
+                        <div>
+                          <i
+                            className={
+                              target.isComplete
+                                ? "far fa-check-square m-1"
+                                : "far fa-square m-1"
+                            }
+                            onClick={() => this.handleComplete(index, authUser)}
+                          />
+                          <input
+                            type="text"
+                            value={target.item}
+                            onChange={(e) =>
+                              this.handleUpdateItems(e, index, authUser)
+                            }
+                            style={{
+                              textDecoration:
+                                target.isComplete && "line-through",
+                            }}
+                          />
+                        </div>
                         <i
-                          className={
-                            target.isComplete
-                              ? "far fa-check-square m-1"
-                              : "far fa-square m-1"
-                          }
-                          onClick={() => this.handleComplete(index, authUser)}
+                          className="fas fa-times"
+                          onClick={() => this.handleDelete(index, authUser)}
                         />
-                        <input
-                          type="text"
-                          value={target.item}
-                          onChange={(e) =>
-                            this.handleUpdateItems(e, index, authUser)
-                          }
-                          style={{
-                            textDecoration: target.isComplete && "line-through",
-                          }}
-                        />
-                      </div>
-                      <i
-                        className="fas fa-times"
-                        onClick={() => this.handleDelete(index, authUser)}
-                      />
-                    </form>
+                      </form>
+                      <hr></hr>
+                    </div>
                   ))}
               <hr />
               <Menu handleRemove={() => this.handleRemove(authUser)} />

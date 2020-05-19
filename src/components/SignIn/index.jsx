@@ -7,10 +7,11 @@ import * as ROUTES from "../../constants/routes";
 import { PasswordForgetLink } from "../PasswordForget";
 import CustomButton from "../CustomButton/CustomButton";
 import FormInput from "../FormInput/FormInput";
+import "./SignIn.scss";
 
 const SignInPage = () => (
   <div>
-    <h1>SignIn</h1>
+    <h1>התחבר באמצעות איימיל וסיסמא</h1>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
@@ -47,24 +48,24 @@ class SignInFormBase extends Component {
     const isInvalid = password === "" || email === "";
     return (
       <div className="sign-in">
-        <h2>Sign in with your email and password</h2>
-        <form onSubmit={this.onSubmit}>
+        <p>Sign in with your email and password</p>
+        <form className="form" onSubmit={this.onSubmit}>
           <FormInput
             name="email"
             value={email}
             onChange={this.onChange}
             type="text"
-            placeholder="Email Address"
+            placeholder="Email"
           />
           <FormInput
             name="password"
             value={password}
             onChange={this.onChange}
             type="password"
-            placeholder="Password"
+            placeholder="password"
           />
           <CustomButton disabled={isInvalid} type="submit">
-            Sign In
+            התחבר
           </CustomButton>
           {error && <p>{error.message}</p>}
         </form>

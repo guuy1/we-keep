@@ -1,5 +1,5 @@
 $sub-color: rgb(27, 16, 129);
-$main-color: rgb(80, 233, 162);
+$main-color: rgb(221, 221, 221);
 
 @mixin shrinkLabel {
   //mixin is reusable pisecse of css that you can use
@@ -14,7 +14,7 @@ $main-color: rgb(80, 233, 162);
 
   .form-input {
     background: none;
-    background-color: rgba(255, 255, 255, 0.863);
+    background-color: $main-color;
     color: $sub-color;
     font-size: 18px;
     padding: 10px 10px 10px 5px;
@@ -23,10 +23,11 @@ $main-color: rgb(80, 233, 162);
     border: rgb(0, 132, 255);
     border-radius: 0;
     border-bottom: 1px solid $sub-color;
-    margin: 25px 0;
+    margin: auto;
+    text-align: center;
 
     @media screen and (max-width: 800px) {
-      width: 100%;
+      width: 80%;
     }
 
     &:focus {

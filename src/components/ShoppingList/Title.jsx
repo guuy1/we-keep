@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { compose } from "recompose";
-import "./Title.css";
+import "./Title.scss";
 import "font-awesome/css/font-awesome.min.css";
 import {
   AuthUserContext,

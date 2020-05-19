@@ -12,6 +12,11 @@ import defaultPhoto from "../Data/defaultImage.png";
 import { Search, Image, List } from "semantic-ui-react";
 import _ from "lodash";
 import "./MyProducts.scss";
+import styled from "styled-components";
+
+const InputStyle = styled.div`
+  font-family: "Heebo";
+`;
 
 const MyProducts = () => {
   return (
@@ -222,7 +227,7 @@ class BarcodeListComp extends Component {
                           <List.Content>
                             <List.Header>שם המוצר : {item.title}</List.Header>
                             ברקוד: {item.description}
-                            <div>
+                            <InputStyle>
                               <input
                                 type="date"
                                 id="start"
@@ -233,7 +238,7 @@ class BarcodeListComp extends Component {
                                   this.changeDate(event, item)
                                 }
                               />
-                            </div>
+                            </InputStyle>
                             <button
                               className="negative compact ui button m-1"
                               onClick={() => this.handleDelete(index)}

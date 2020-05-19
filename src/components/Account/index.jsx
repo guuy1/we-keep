@@ -5,14 +5,14 @@ import PasswordChangeForm from "../PasswordChange";
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification
+  withEmailVerification,
 } from "../Session";
 
 const AccountPage = () => (
   <AuthUserContext.Consumer>
-    {authUser => (
+    {(authUser) => (
       <div>
-        <h1>Account: {authUser.email}</h1>
+        <h1>{authUser.email}</h1>
         <PasswordForgetForm />
         <hr />
         <PasswordChangeForm />
@@ -20,7 +20,7 @@ const AccountPage = () => (
     )}
   </AuthUserContext.Consumer>
 );
-const condition = authUser => !!authUser;
+const condition = (authUser) => !!authUser;
 
 export default compose(
   withEmailVerification,

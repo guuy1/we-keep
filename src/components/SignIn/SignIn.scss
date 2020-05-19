@@ -1,0 +1,38 @@
+// @media all and (min-width: 480px) {
+//     .SignIn {
+//         padding: 60px 0;
+//     }
+
+//     .SignIn form {
+//         margin: 0 auto;
+//         max-width: 320px;
+//     }
+// }
+
+h1 {
+  text-align: center;
+  font-size: 60px;
+
+  @media screen and(max-width: 800px) {
+    font-size: 40px;
+  }
+}
+
+p {
+  text-align: center;
+  font-size: 30px;
+  color: rgb(62, 159, 238);
+
+  @media screen and(max-width: 800px) {
+    font-size: 25px;
+  }
+}
+
+.form {
+  margin: auto;
+  width: 50%;
+
+  @media screen and(max-width: 800px) {
+    width: 80%;
+  }
+}

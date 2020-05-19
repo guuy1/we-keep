@@ -8,18 +8,21 @@ class Landing extends React.Component {
   render() {
     return (
       <div className="about-us">
-        <h1 className="title">Welcome to WeKeep</h1>
+        <h1 className="title">We Keep</h1>
         <p className="sub">
-          The purpose of this App is to improve the management of your
-          HousKeeping, With an emphasis on managing the refrigerator.
+          בעזרת אפליקציית WeKeep תוכלו אתה ומשפחתך או שותפייך לנהל את משק הבית
+          בצורה יעילה וקלה יותר.בעזרת סריקת ברקוד מהירה תוכלו לעקוב אחרי תכולת
+          המקרר שלכם בכל רגע.
         </p>
-        <p className="sub">
-          Our App also help to improve the family communication relating to the
-          management of the household, such as a grocery shopping list
+        <p className="sub1">
+          בעזרת WeKeep גם התקשורת שלכם תשתפר בעזרת רשימות משותפות המתעדכנות בזמן
+          אמת אצל כל דיירי הבית.
         </p>
-        <p className="sub1">Join Us And Make Your Life More Organized </p>
-        <Link to={ROUTES.SIGN_UP}>
-          <CustomButton>sign up now</CustomButton>
+        <p className="sub2">
+          הצטרפו ל WeKeep עכשיו והפכו את חייכם למסודרים יותר
+        </p>
+        <Link className="link" to={ROUTES.SIGN_UP}>
+          <CustomButton>הירשמו עכשיו</CustomButton>
         </Link>
       </div>
     );

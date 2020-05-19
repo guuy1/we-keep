@@ -1,0 +1,125 @@
+.shopping-list {
+  width: 100vw;
+}
+
+header {
+  border-bottom: 1px solid lightgrey;
+  height: 50px;
+  margin: 20px 0 50px 0;
+  display: flex;
+  align-items: center;
+}
+
+header img {
+  padding: 0 10px 0 20px;
+  height: 50px;
+  width: 50px;
+}
+
+header span {
+  color: dimgrey;
+  font-size: 24px;
+}
+
+.itemContainer {
+  width: 500px;
+  min-height: 300px;
+  padding: 20px 0;
+  /* margin: auto; */
+  margin-top: 30px;
+  margin-left: 100px;
+  border: 1px solid rgb(80, 233, 162);
+  border-radius: 10px;
+  font-size: 20px;
+  position: relative;
+  text-align: right;
+
+  @media only screen and(min-device-width:280px) and(max-device-width: 750px) {
+    width: 280px;
+    margin-top: 30px;
+    margin-left: 30px;
+  }
+
+  @media (orientation: landscape) and (min-device-height: 1000px),
+    all and (min-width: 1000px) {
+    width: 850px;
+    margin-top: 30px;
+    margin-left: 30px;
+  }
+}
+
+form {
+  padding: 5px 20px;
+
+  @media (orientation: landscape) and (min-device-height: 1000px),
+    all and (min-width: 700px) {
+    padding: 5px 130px;
+  }
+
+  @media (orientation: landscape) and (min-device-height: 1000px),
+    all and (min-width: 900px) {
+    padding: 5px 200px;
+  }
+}
+
+form:focus-within {
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+
+.itemsForm {
+  display: flex;
+  justify-content: space-between;
+  text-align: right;
+}
+
+.itemsForm:focus-within .fa-times {
+  display: block;
+}
+
+.itemsForm:hover .fa-times {
+  display: block;
+}
+
+.itemsForm input,
+.itemsForm input {
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+  width: 400px;
+  background-color: whitesmoke;
+  font-size: 18px;
+  text-align: right;
+
+  @media screen and(max-width: 800px) {
+    width: 180px;
+  }
+}
+
+.itemsForm input::placeholder,
+.itemsForm input::placeholder {
+  font-size: 15px;
+}
+
+.fas,
+.far {
+  border: 0;
+  outline: none;
+  background-color: whitesmoke;
+  color: rgb(20, 16, 16);
+  cursor: pointer;
+}
+
+.fa-times {
+  display: none;
+}
+
+.fa-plus {
+  padding: 0 5px 0 2px;
+  font-size: 12px;
+}
+
+.fa-square:hover,
+.fa-check-square:hover {
+  color: black;
+}
