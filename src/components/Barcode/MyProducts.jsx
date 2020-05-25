@@ -18,6 +18,12 @@ const InputStyle = styled.div`
   font-family: "Heebo";
 `;
 
+const ButtonStyle = styled.button`
+  width: 40px !important;
+  font-size: x-small !important;
+  margin-top: 10px !important;
+`;
+
 const MyProducts = () => {
   return (
     <AuthUserContext.Consumer>
@@ -239,12 +245,12 @@ class BarcodeListComp extends Component {
                                 }
                               />
                             </InputStyle>
-                            <button
-                              className="negative compact ui button m-1"
+                            <ButtonStyle
+                              className="negative ui button "
                               onClick={() => this.handleDelete(index)}
                             >
-                              מחק מוצר
-                            </button>
+                              <i className="fa fa-trash fa-lg"></i>
+                            </ButtonStyle>
                             {/* {notify ? (
                               <i
                                 className="fas fa-bell-slash"

@@ -13,4 +13,9 @@ h1 {
   @media screen and(max-width: 800px) {
     margin-left: 20% !important;
   }
+
+  .ui.button {
+    width: 2000px !important;
+    margin-left: 300px !important;
+  }
 }
