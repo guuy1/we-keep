@@ -10,6 +10,8 @@ import Title from "./Title";
 import Menu from "./Menu";
 import "./ShoppingList.scss";
 import "font-awesome/css/font-awesome.min.css";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const ShoppingList = ({ handleDeleteList, listKey, authUser }) => {
   return (
@@ -64,7 +66,7 @@ class ShoppingListComp extends Component {
     this.props.firebase.users().off();
   }
 
-  handleAdd(e, authUser) {
+  handleAdd(e) {
     e.preventDefault();
     if (!this.state.item) return; // don't add empty item to array
     //add new item to list in state
@@ -90,13 +92,13 @@ class ShoppingListComp extends Component {
         this.props.firebase.list(this.props.listKey).set({
           title: this.state.title,
           list: [...this.state.lists],
-          user: [authUser.uid],
+          user: [this.props.authUser.uid],
         });
       }
     );
   }
 
-  handleComplete(index, authUser) {
+  handleComplete(index) {
     //mark the item to complete or not
     const { lists } = this.state;
     const newItems = [...lists];
@@ -108,7 +110,7 @@ class ShoppingListComp extends Component {
       this.props.firebase.list(this.props.listKey).set({
         title: this.state.title,
         list: [...this.state.lists],
-        user: [authUser.uid],
+        user: [this.props.authUser.uid],
       });
     });
   }
@@ -117,7 +119,7 @@ class ShoppingListComp extends Component {
     this.setState({ item: e.target.value });
   }
 
-  handleUpdateItems(e, index, authUser) {
+  handleUpdateItems(e, index) {
     //update the lists in list (not new ones)
     const { lists } = this.state;
     const newItems = [...lists];
@@ -129,12 +131,12 @@ class ShoppingListComp extends Component {
       this.props.firebase.list(this.props.listKey).set({
         title: this.state.title,
         list: [...this.state.lists],
-        user: [authUser.uid],
+        user: [this.props.authUser.uid],
       });
     });
   }
 
-  handleDelete(index, authUser) {
+  handleDelete(index) {
     //delete specific item from list
     const { lists } = this.state;
     const newItems = [...lists];
@@ -143,12 +145,12 @@ class ShoppingListComp extends Component {
       this.props.firebase.list(this.props.listKey).set({
         title: this.state.title,
         list: [...this.state.lists],
-        user: [authUser.uid],
+        user: [this.props.authUser.uid],
       });
     });
   }
 
-  handleRemove(authUser) {
+  handleRemove() {
     //if user clicked delete the list from "Menu" Copmponent
     // it's call here to change the state
     this.setState({ lists: [] });
@@ -156,15 +158,15 @@ class ShoppingListComp extends Component {
       const index = this.state.userLists.findIndex(
         (target) => target.key === this.props.listKey
       );
-      const username = authUser.username;
-      const email = authUser.email;
-      const roles = authUser.roles;
-      const itemsExpirationKey = authUser.itemsExpirationKey;
+      const username = this.props.authUser.username;
+      const email = this.props.authUser.email;
+      const roles = this.props.authUser.roles;
+      const itemsExpirationKey = this.props.authUser.itemsExpirationKey;
       const { userLists } = this.state;
       const lists = [...userLists];
       lists.splice(index, 1);
       //update the lists from user
-      this.props.firebase.user(authUser.uid).set({
+      this.props.firebase.user(this.props.authUser.uid).set({
         username,
         email,
         roles,
@@ -177,18 +179,32 @@ class ShoppingListComp extends Component {
     }
   }
 
+  deleteDialog = () => {
+    confirmAlert({
+      title: "מחיקת רשימה",
+      message: "?האם אתה בטוח שברצונך למחוק רשימה זו",
+      buttons: [
+        {
+          label: "כן",
+          onClick: () => this.handleRemove(),
+        },
+        {
+          label: "לא",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+
   render() {
     const { lists, item } = this.state;
     return (
       <AuthUserContext.Consumer>
-        {(authUser) => (
+        {() => (
           <div className="shopping-list">
             <div className="itemContainer">
               <Title listKey={this.props.listKey} />
-              <form
-                onSubmit={(e) => this.handleAdd(e, authUser)}
-                className="itemsForm"
-              >
+              <form onSubmit={(e) => this.handleAdd(e)} className="itemsForm">
                 <input
                   type="text"
                   value={item}
@@ -202,7 +218,7 @@ class ShoppingListComp extends Component {
                   .map((target, index) => (
                     <div>
                       <form
-                        onSubmit={(e) => this.handleAdd(e, authUser)}
+                        onSubmit={(e) => this.handleAdd(e)}
                         className="itemsForm"
                         key={index}
                       >
@@ -213,14 +229,12 @@ class ShoppingListComp extends Component {
                                 ? "far fa-check-square m-1"
                                 : "far fa-square m-1"
                             }
-                            onClick={() => this.handleComplete(index, authUser)}
+                            onClick={() => this.handleComplete(index)}
                           />
                           <input
                             type="text"
                             value={target.item}
-                            onChange={(e) =>
-                              this.handleUpdateItems(e, index, authUser)
-                            }
+                            onChange={(e) => this.handleUpdateItems(e, index)}
                             style={{
                               textDecoration:
                                 target.isComplete && "line-through",
@@ -229,14 +243,14 @@ class ShoppingListComp extends Component {
                         </div>
                         <i
                           className="fas fa-times"
-                          onClick={() => this.handleDelete(index, authUser)}
+                          onClick={() => this.handleDelete(index)}
                         />
                       </form>
                       <hr></hr>
                     </div>
                   ))}
               <hr />
-              <Menu handleRemove={() => this.handleRemove(authUser)} />
+              <Menu deleteDialog={() => this.deleteDialog()} />
             </div>
           </div>
         )}

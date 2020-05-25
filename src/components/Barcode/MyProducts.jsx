@@ -13,6 +13,8 @@ import { Search, Image, List } from "semantic-ui-react";
 import _ from "lodash";
 import "./MyProducts.scss";
 import styled from "styled-components";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const InputStyle = styled.div`
   font-family: "Heebo";
@@ -192,6 +194,24 @@ class BarcodeListComp extends Component {
       }
     }, 300);
   };
+
+  deleteDialog = (index) => {
+    confirmAlert({
+      title: "מחיקת מוצר",
+      message: "?האם אתה בטוח שברצונך למחוק מוצר זה",
+      buttons: [
+        {
+          label: "כן",
+          onClick: () => this.handleDelete(index),
+        },
+        {
+          label: "לא",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+
   render() {
     const { isLoading, value, results /*notify*/ } = this.state;
 
@@ -212,7 +232,7 @@ class BarcodeListComp extends Component {
                   results={results}
                   resultRenderer={this.resultRenderer}
                   value={value}
-                  placeholder="ארבע ספרות אחרונות"
+                  placeholder="ארבע ספרות של הברקוד"
                 />
               </div>
             </div>
@@ -247,7 +267,7 @@ class BarcodeListComp extends Component {
                             </InputStyle>
                             <ButtonStyle
                               className="negative ui button "
-                              onClick={() => this.handleDelete(index)}
+                              onClick={() => this.deleteDialog(index)}
                             >
                               <i className="fa fa-trash fa-lg"></i>
                             </ButtonStyle>

@@ -13,9 +13,17 @@ import Quagga from "../Quagga";
 import * as ROUTES from "../../constants/routes";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const Input = styled.div`
   font-family: "Heebo";
+`;
+
+const ButtonStyle = styled.button`
+  width: 40px !important;
+  font-size: x-small !important;
+  margin-top: 10px !important;
 `;
 
 const SearchBarcode = () => {
@@ -153,6 +161,23 @@ class ScanBarcodeComp extends Component {
     );
   }
 
+  deleteDialog = (index) => {
+    confirmAlert({
+      title: "מחיקת מוצר",
+      message: "?האם אתה בטוח שברצונך למחוק מוצר זה",
+      buttons: [
+        {
+          label: "כן",
+          onClick: () => this.handleDelete(index),
+        },
+        {
+          label: "לא",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+
   render() {
     return (
       <AuthUserContext.Consumer>
@@ -209,12 +234,12 @@ class ScanBarcodeComp extends Component {
                                 }
                               />
                             </Input>
-                            <button
-                              className="negative compact ui button m-1"
-                              onClick={() => this.handleDelete(index)}
+                            <ButtonStyle
+                              className="negative ui button "
+                              onClick={() => this.deleteDialog(index)}
                             >
-                              מחק מוצר
-                            </button>
+                              <i className="fa fa-trash fa-lg"></i>
+                            </ButtonStyle>
                           </List.Content>
                         </List.Item>
                       </List>

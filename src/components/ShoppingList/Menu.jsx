@@ -9,10 +9,10 @@ import {
 } from "../Session";
 import { withFirebase } from "../Firebase";
 
-const Menu = ({ handleRemove }) => {
+const Menu = ({ deleteDialog }) => {
   return (
     <div>
-      <HendleMenu handleRemove={handleRemove} />
+      <HendleMenu deleteDialog={deleteDialog} />
     </div>
   );
 };
@@ -26,7 +26,7 @@ class MenuComp extends Component {
             {/*use with Parent function to remove the list and clear the state*/}
             <i
               className="far fa-trash-alt m-1"
-              onClick={this.props.handleRemove}
+              onClick={this.props.deleteDialog}
             />
           </section>
         )}

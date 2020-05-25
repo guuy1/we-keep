@@ -3,7 +3,7 @@ h1 {
   color: #007bff;
 }
 
-.ui.input > input {
+.ui.input>input {
   text-align: right !important;
 }
 
@@ -18,4 +18,14 @@ h1 {
     width: 2000px !important;
     margin-left: 300px !important;
   }
+}
+
+.react-confirm-alert-body {
+  text-align: center;
+}
+
+.react-confirm-alert-button-group {
+  margin: auto;
+  margin-top: 3% !important;
+  display: block;
 }
