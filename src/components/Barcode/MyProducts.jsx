@@ -232,7 +232,7 @@ class BarcodeListComp extends Component {
                   results={results}
                   resultRenderer={this.resultRenderer}
                   value={value}
-                  placeholder="ארבע ספרות של הברקוד"
+                  placeholder="חפש בעזרת 4 ספרות אחרונות של הברקוד "
                 />
               </div>
             </div>

@@ -8,11 +8,7 @@ import Quagga from "quagga";
 // import Popup from "./Popup";
 
 const QuaggaComp = ({ scanBarcode }) => {
-  return (
-    <div>
-      <QuaggaC scanBarcode={scanBarcode} />
-    </div>
-  );
+  return <QuaggaC scanBarcode={scanBarcode} />;
 };
 class QuaggaReact extends Component {
   constructor(props) {
@@ -63,7 +59,12 @@ class QuaggaReact extends Component {
   render() {
     return (
       <div>
-        <button className="btn btn-primary m-1" onClick={this._scan}>
+        <button
+          className={
+            this.state.scanning ? "btn btn-danger m-1" : "btn btn-success m-1"
+          }
+          onClick={this._scan}
+        >
           {this.state.scanning ? "סיים סריקה" : "התחל סריקה"}
         </button>
         {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}

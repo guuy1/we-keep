@@ -216,7 +216,7 @@ class ShoppingListComp extends Component {
                 lists
                   .sort((a, b) => a.isComplete - b.isComplete)
                   .map((target, index) => (
-                    <div>
+                    <div key={index}>
                       <form
                         onSubmit={(e) => this.handleAdd(e)}
                         className="itemsForm"

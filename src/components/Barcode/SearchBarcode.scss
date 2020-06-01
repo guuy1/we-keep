@@ -1,9 +1,16 @@
 .react-confirm-alert-body {
-    text-align: center;
+  text-align: center;
 }
 
 .react-confirm-alert-button-group {
-    margin: auto;
-    margin-top: 3% !important;
-    display: block;
+  margin: auto;
+  margin-top: 3% !important;
+  display: block;
+}
+
+.content {
+  color: black;
+}
+.btn {
+  font-size: large !important;
 }

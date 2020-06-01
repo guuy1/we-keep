@@ -8,13 +8,14 @@ import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import "bootstrap/dist/css/bootstrap.css";
 import defaultPhoto from "../Data/defaultImage.png";
-import { Image, List } from "semantic-ui-react";
+import { Image, List, Container } from "semantic-ui-react";
 import Quagga from "../Quagga";
 import * as ROUTES from "../../constants/routes";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import "./SearchBarcode.scss";
 
 const Input = styled.div`
   font-family: "Heebo";
@@ -184,7 +185,27 @@ class ScanBarcodeComp extends Component {
         {() => (
           <div id="content">
             <h1 align="center">מוצרים שנסרקו</h1>
-            <div className="row">
+            <Container textAlign="center">
+              <Link to={ROUTES.MY_PRODUCTS}>
+                <button className="btn btn-primary">
+                  <i className="fa fa-angle-double-left" aria-hidden="true"></i>{" "}
+                  <i className="fa fa-angle-double-left" aria-hidden="true"></i>{" "}
+                  עבור למוצרים שלי
+                </button>
+              </Link>
+              <button
+                className="btn btn-primary "
+                onClick={() => this.handleAdd()}
+                disabled={this.state.isInvalid}
+              >
+                <i className="fa fa-plus-circle" aria-hidden="true"></i> הוסף
+                למוצרים שלי
+              </button>
+              <p></p>
+              <Quagga scanBarcode={this.scanBarcode} />
+            </Container>
+
+            {/* <div className="row">
               <div className="col m-1 ">
                 <Link to={ROUTES.MY_PRODUCTS}>
                   <button className="btn btn-primary m-1">
@@ -204,7 +225,7 @@ class ScanBarcodeComp extends Component {
               <div className="col">
                 <Quagga scanBarcode={this.scanBarcode} />
               </div>
-            </div>
+            </div> */}
 
             <div className="row m-1">
               {this.state.newItems.length > 0 &&

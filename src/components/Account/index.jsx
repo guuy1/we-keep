@@ -1,7 +1,7 @@
 import React from "react";
 import { compose } from "recompose";
 import { PasswordForgetForm } from "../PasswordForget";
-import PasswordChangeForm from "../PasswordChange";
+//import PasswordChangeForm from "../PasswordChange";
 import {
   AuthUserContext,
   withAuthorization,
@@ -13,9 +13,10 @@ const AccountPage = () => (
     {(authUser) => (
       <div>
         <h1>{authUser.email}</h1>
+        <p>הכנס כתובת איימיל ואנו נשלח לך לינק לאיפוס סיסמא</p>
         <PasswordForgetForm />
         <hr />
-        <PasswordChangeForm />
+        {/* <PasswordChangeForm /> */}
       </div>
     )}
   </AuthUserContext.Consumer>
