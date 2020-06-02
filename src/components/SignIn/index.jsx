@@ -55,14 +55,14 @@ class SignInFormBase extends Component {
             value={email}
             onChange={this.onChange}
             type="text"
-            placeholder="Email"
+            placeholder="אימייל"
           />
           <FormInput
             name="password"
             value={password}
             onChange={this.onChange}
             type="password"
-            placeholder="password"
+            placeholder="סיסמא"
           />
           <CustomButton disabled={isInvalid} type="submit">
             התחבר
