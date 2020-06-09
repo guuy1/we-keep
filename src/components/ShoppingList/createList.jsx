@@ -9,6 +9,7 @@ import {
 } from "../Session";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
+import "./createList.scss";
 
 const CreatList = () => {
   return (
@@ -39,7 +40,7 @@ class ListComp extends Component {
       if (listObject) {
         const userLists = listObject[this.props.authUser.uid].lists;
         if (userLists) {
-          this.setState({ _lists: userLists });
+          this.setState({ _lists: userLists, key: userLists[0].key });
         } else {
           this.setState({ _lists: [], key: "" });
         }
@@ -98,36 +99,38 @@ class ListComp extends Component {
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
-          <div className="container">
-            <div className="row">
-              <div className="col">
-                <Button
-                  className="btn btn-primary m-1"
-                  onClick={() => this.handleAdd()}
-                >
-                  הוספת רשימה חדשה
-                </Button>
-                {_lists.length > 0 &&
-                  _lists.map((item, index) => (
-                    <Button
-                      key={index}
-                      className="btn btn-secondary m-1"
-                      onClick={() => this.handleLists(item)}
-                    >
-                      {index + 1}
-                    </Button>
-                  ))}
+          <div className="create-list">
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  <Button
+                    className="btn btn-primary m-1"
+                    onClick={() => this.handleAdd()}
+                  >
+                    הוספת רשימה חדשה
+                  </Button>
+                  {_lists.length > 0 &&
+                    _lists.map((item, index) => (
+                      <Button
+                        key={index}
+                        className="btn btn-secondary m-1"
+                        onClick={() => this.handleLists(item)}
+                      >
+                        {index + 1}
+                      </Button>
+                    ))}
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                {this.state.key ? (
-                  <ShoppingList
-                    handleDeleteList={this.handleDeleteList}
-                    listKey={this.state.key}
-                    authUser={authUser}
-                  ></ShoppingList>
-                ) : null}
+              <div className="row">
+                <div className="col">
+                  {this.state.key ? (
+                    <ShoppingList
+                      handleDeleteList={this.handleDeleteList}
+                      listKey={this.state.key}
+                      authUser={authUser}
+                    ></ShoppingList>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>

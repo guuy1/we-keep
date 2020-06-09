@@ -41,7 +41,7 @@ header span {
   }
 
   @media (orientation: landscape) and (min-device-height: 1000px),
-    all and (min-width: 1000px) {
+  all and (min-width: 1000px) {
     width: 850px;
     margin-top: 30px;
     margin-left: 30px;
@@ -52,12 +52,12 @@ form {
   padding: 5px 20px;
 
   @media (orientation: landscape) and (min-device-height: 1000px),
-    all and (min-width: 700px) {
+  all and (min-width: 700px) {
     padding: 5px 130px;
   }
 
   @media (orientation: landscape) and (min-device-height: 1000px),
-    all and (min-width: 900px) {
+  all and (min-width: 900px) {
     padding: 5px 200px;
   }
 }

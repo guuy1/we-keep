@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const ForgetPassLinkStyles = css`
   text-align: right;
-  color: rgb(62, 159, 238);
+  color: #006666;
   font-weight: bold;
   font-size: 30px;
   direction: rtl;

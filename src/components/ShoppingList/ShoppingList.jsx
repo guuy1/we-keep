@@ -15,13 +15,11 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const ShoppingList = ({ handleDeleteList, listKey, authUser }) => {
   return (
-    <div>
-      <Shopping
-        handleDeleteList={handleDeleteList}
-        listKey={listKey}
-        authUser={authUser}
-      />
-    </div>
+    <Shopping
+      handleDeleteList={handleDeleteList}
+      listKey={listKey}
+      authUser={authUser}
+    />
   );
 };
 class ShoppingListComp extends Component {
@@ -212,43 +210,45 @@ class ShoppingListComp extends Component {
                   placeholder="מוצר חדש"
                 />
               </form>
-              {lists &&
-                lists
-                  .sort((a, b) => a.isComplete - b.isComplete)
-                  .map((target, index) => (
-                    <div key={index}>
-                      <form
-                        onSubmit={(e) => this.handleAdd(e)}
-                        className="itemsForm"
-                        key={index}
-                      >
-                        <div>
+              <div className="items">
+                {lists &&
+                  lists
+                    .sort((a, b) => a.isComplete - b.isComplete)
+                    .map((target, index) => (
+                      <div key={index}>
+                        <form
+                          onSubmit={(e) => this.handleAdd(e)}
+                          className="itemsForm"
+                          key={index}
+                        >
+                          <div>
+                            <i
+                              className={
+                                target.isComplete
+                                  ? "far fa-check-square m-1"
+                                  : "far fa-square m-1"
+                              }
+                              onClick={() => this.handleComplete(index)}
+                            />
+                            <input
+                              type="text"
+                              value={target.item}
+                              onChange={(e) => this.handleUpdateItems(e, index)}
+                              style={{
+                                textDecoration:
+                                  target.isComplete && "line-through",
+                              }}
+                            />
+                          </div>
                           <i
-                            className={
-                              target.isComplete
-                                ? "far fa-check-square m-1"
-                                : "far fa-square m-1"
-                            }
-                            onClick={() => this.handleComplete(index)}
+                            className="fas fa-times"
+                            onClick={() => this.handleDelete(index)}
                           />
-                          <input
-                            type="text"
-                            value={target.item}
-                            onChange={(e) => this.handleUpdateItems(e, index)}
-                            style={{
-                              textDecoration:
-                                target.isComplete && "line-through",
-                            }}
-                          />
-                        </div>
-                        <i
-                          className="fas fa-times"
-                          onClick={() => this.handleDelete(index)}
-                        />
-                      </form>
-                      <hr></hr>
-                    </div>
-                  ))}
+                        </form>
+                        <hr></hr>
+                      </div>
+                    ))}
+              </div>
               <hr />
               <Menu deleteDialog={() => this.deleteDialog()} />
             </div>
