@@ -264,23 +264,32 @@ class BarcodeListComp extends Component {
                     daysLeft = (
                       <span className="days-left">
                         {" "}
-                        <span>!!! יום אחרון למוצר זה</span>
+                        <span>המוצר פג תוקף היום</span>
+                      </span>
+                    );
+                  } else if (diffDays === 1) {
+                    daysLeft = (
+                      <span className="days-left">
+                        {" "}
+                        <span>המוצר פג תוקף מחר</span>
                       </span>
                     );
                   } else if (isExpired) {
                     daysLeft = (
                       <span className="days-left">
                         {" "}
+                        <span>המוצר פג תוקף </span>
                         <span>{Math.abs(diffDays)}</span>
-                        <span> : ימים שעברו</span>
+                        <span> ימים</span>
                       </span>
                     );
                   } else {
                     daysLeft = (
                       <span className="days-left">
                         {" "}
+                        <span>המוצר פג תוקף בעוד </span>
                         <span>{diffDays}</span>
-                        <span> : ימים שנותרו</span>
+                        <span> ימים</span>
                       </span>
                     );
                   }
