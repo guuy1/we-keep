@@ -3,7 +3,7 @@ h1 {
   color: #007bff;
 }
 
-.ui.input>input {
+.ui.input > input {
   width: 300px !important;
   text-align: right !important;
 }
@@ -23,6 +23,50 @@ h1 {
 
 .react-confirm-alert-body {
   text-align: center;
+}
+
+.expired {
+  border: 2px solid red;
+  margin: 5px;
+}
+
+.almost-expired {
+  border: 2px solid #ffd800;
+  margin: 5px;
+}
+
+.not-expired {
+  border: 2px solid #47d31d;
+  margin: 5px;
+}
+
+.item-width {
+  @media screen and(max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.item {
+  @media screen and(max-width: 600px) {
+    display: flex !important;
+    justify-content: space-between !important;
+
+    &::after {
+      display: none !important;
+    }
+  }
+}
+
+.days-left {
+  margin-right: 10px;
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.items-container {
+  justify-content: center;
+  align-items: center;
 }
 
 .react-confirm-alert-button-group {

@@ -15,6 +15,7 @@ import "./MyProducts.scss";
 import styled from "styled-components";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import classNames from "classnames";
 
 const InputStyle = styled.div`
   font-family: "Heebo";
@@ -237,11 +238,54 @@ class BarcodeListComp extends Component {
               </div>
             </div>
 
-            <div className="row m-1">
+            <div className="row m-1 items-container">
               {this.state.itemsList.length > 0 &&
                 this.state.itemsList.map((item, index) => {
+                  const now = new Date();
+                  const itemDate = new Date(item.expiredDate);
+                  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+                  const firstDate = new Date(itemDate);
+                  const secondDate = new Date(now);
+
+                  const diffDays = Math.round(
+                    (firstDate - secondDate) / oneDay
+                  );
+
+                  const isExpired = diffDays <= 0;
+                  const almostExpired = diffDays <= 3 && diffDays > 0;
+                  const liClasses = classNames({
+                    expired: isExpired,
+                    "almost-expired": almostExpired,
+                    "not-expired": !almostExpired && !isExpired,
+                    "item-width": true,
+                  });
+                  let daysLeft;
+                  if (diffDays === 0) {
+                    daysLeft = (
+                      <span className="days-left">
+                        {" "}
+                        <span>!!! יום אחרון למוצר זה</span>
+                      </span>
+                    );
+                  } else if (isExpired) {
+                    daysLeft = (
+                      <span className="days-left">
+                        {" "}
+                        <span>{Math.abs(diffDays)}</span>
+                        <span> : ימים שעברו</span>
+                      </span>
+                    );
+                  } else {
+                    daysLeft = (
+                      <span className="days-left">
+                        {" "}
+                        <span>{diffDays}</span>
+                        <span> : ימים שנותרו</span>
+                      </span>
+                    );
+                  }
                   return (
-                    <div key={index}>
+                    <div key={index} className={liClasses}>
                       <List celled>
                         <List.Item>
                           <Image
@@ -251,7 +295,7 @@ class BarcodeListComp extends Component {
                             alt=""
                           />
                           <List.Content>
-                            <List.Header>שם המוצר : {item.title}</List.Header>
+                            <List.Header>מוצר:{item.title}</List.Header>
                             ברקוד: {item.description}
                             <InputStyle>
                               <input
@@ -265,23 +309,13 @@ class BarcodeListComp extends Component {
                                 }
                               />
                             </InputStyle>
+                            {daysLeft}
                             <ButtonStyle
                               className="negative ui button "
                               onClick={() => this.deleteDialog(index)}
                             >
                               <i className="fa fa-trash fa-lg"></i>
                             </ButtonStyle>
-                            {/* {notify ? (
-                              <i
-                                className="fas fa-bell-slash"
-                                onClick={() => this.handleNotify()}
-                              ></i>
-                            ) : (
-                              <i
-                                className="fas fa-bell"
-                                onClick={() => this.handleNotify()}
-                              ></i>
-                            )} */}
                           </List.Content>
                         </List.Item>
                       </List>
