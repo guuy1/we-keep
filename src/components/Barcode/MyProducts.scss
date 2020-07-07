@@ -3,16 +3,20 @@ h1 {
   color: #007bff;
 }
 
-.ui.input > input {
+.ui.input>input {
   width: 300px !important;
   text-align: right !important;
 }
 
 .ui.search {
   margin-left: 37% !important;
+  margin-right: 3% !important;
+  display: grid;
 
-  @media screen and(max-width: 600px) {
+  @media screen and(max-width: 1024px) {
     margin-left: 3% !important;
+    margin-right: 3% !important;
+    display: grid;
   }
 
   // .ui.button {
@@ -41,13 +45,13 @@ h1 {
 }
 
 .item-width {
-  @media screen and(max-width: 600px) {
+  @media screen and(max-width: 1024px) {
     width: 100%;
   }
 }
 
 .item {
-  @media screen and(max-width: 600px) {
+  @media screen and(max-width: 1024px) {
     display: flex !important;
     justify-content: space-between !important;
 

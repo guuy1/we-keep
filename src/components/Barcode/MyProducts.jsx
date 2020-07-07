@@ -94,10 +94,6 @@ class BarcodeListComp extends Component {
     </div>,
   ];
 
-  // handleNotify() {
-  //   this.setState({ notify: !this.state.notify });
-  // }
-
   getItemImageURL(barcode) {
     const url = `http://m.pricez.co.il/ProductPictures/${barcode}.jpg`;
     return url;
@@ -247,6 +243,7 @@ class BarcodeListComp extends Component {
                   const firstDate = new Date(itemDate);
                   const secondDate = new Date(now);
 
+                  firstDate.setHours(0); // change time zone GMT/UTC +0 hours to handle on local time
                   const diffDays = Math.round(
                     (firstDate - secondDate) / oneDay
                   );
