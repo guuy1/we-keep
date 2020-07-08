@@ -2,7 +2,7 @@ README.md
 
 <p >
   <a href="" rel="noopener">
- <img width=200px height=200px src="C:\Users\sarai\Desktop\פרוייקט גמר מסמכים\logo.svg" alt="WeKeep logo"></a>
+ <img width=200px height=200px src="src/Data/logo.svg" alt="WeKeep logo"></a>
 </p>
 
 <h3>WeKeep App</h3>
