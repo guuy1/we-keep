@@ -22,6 +22,8 @@ const INITIAL_STATE = {
   password: "",
   error: null,
 };
+
+//check user name and psw with Firebase
 class SignInFormBase extends Component {
   constructor(props) {
     super(props);

@@ -27,6 +27,7 @@ const ButtonStyle = styled.button`
   margin-top: 10px !important;
 `;
 
+//This page show all products that was scan or add by user
 const MyProducts = () => {
   return (
     <AuthUserContext.Consumer>
@@ -70,6 +71,7 @@ class BarcodeListComp extends Component {
     this.props.firebase.items().off();
   }
 
+  //if product image doesn't exist set to default image
   defaultImage = (e, description) => {
     e.target.src = defaultPhoto;
     const newResults = this.state.results.map((item) => {
@@ -81,6 +83,7 @@ class BarcodeListComp extends Component {
     return this.setState({ result: newResults });
   };
 
+  //Display product after search
   resultRenderer = ({ image, price, title, description }) => [
     image && (
       <div key="image" className="image">
@@ -99,6 +102,7 @@ class BarcodeListComp extends Component {
     return url;
   }
 
+  //change the date on product and update the DB
   changeDate(event, changedItem) {
     const cloneItems = JSON.parse(JSON.stringify(this.state.itemsList));
     const currentItem = cloneItems.find(
@@ -114,8 +118,8 @@ class BarcodeListComp extends Component {
     });
   }
 
+  //delete specific item from list
   handleDelete(index) {
-    //delete specific item from list
     const { itemsList } = this.state;
     const newItems = [...itemsList];
     newItems.splice(index, 1);
@@ -135,6 +139,7 @@ class BarcodeListComp extends Component {
     }
   }
 
+  //choose result from list after searching manually and add to user products
   handleResultSelect = (e, { result }) => {
     const itemKey = this.props.firebase.item().push().getKey();
     result.expiredDate = todayDate;
@@ -156,6 +161,7 @@ class BarcodeListComp extends Component {
     );
   };
 
+  //manually searching
   handleSearchChange = (e, { value }) => {
     this.setState({ isLoading: true, value });
 
@@ -192,6 +198,7 @@ class BarcodeListComp extends Component {
     }, 300);
   };
 
+  //alert before delete item
   deleteDialog = (index) => {
     confirmAlert({
       title: "מחיקת מוצר",
@@ -235,6 +242,8 @@ class BarcodeListComp extends Component {
             </div>
 
             <div className="row m-1 items-container">
+              {/*compare between product expiration date to real date and mark product in color by there state.
+              green for valid products, yellow for products that are about to be expiered and red for expiered products*/}
               {this.state.itemsList.length > 0 &&
                 this.state.itemsList.map((item, index) => {
                   const now = new Date();
@@ -242,11 +251,9 @@ class BarcodeListComp extends Component {
                   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
                   const firstDate = new Date(itemDate);
                   const secondDate = new Date(now);
-
                   firstDate.setHours(0); // change time zone GMT/UTC +0 hours to handle on local time
-                  const diffDays = Math.round(
-                    (firstDate - secondDate) / oneDay
-                  );
+
+                  const diffDays = Math.ceil((firstDate - secondDate) / oneDay); //rounding up
 
                   const isExpired = diffDays <= 0;
                   const almostExpired = diffDays <= 3 && diffDays > 0;

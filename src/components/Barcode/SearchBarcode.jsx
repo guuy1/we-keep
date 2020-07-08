@@ -81,7 +81,7 @@ class ScanBarcodeComp extends Component {
     });
     return this.setState({ result: newResults });
   };
-
+  //Display product after scan
   resultRenderer = ({ image, price, title, description }) => [
     image && (
       <div key="image" className="image">
@@ -95,6 +95,7 @@ class ScanBarcodeComp extends Component {
     </div>,
   ];
 
+  //show and set the result
   scanBarcode = (result) => {
     const imgURL = this.getItemImageURL(result.ItemCode);
     const itemKey = this.props.firebase.item().push().getKey();
@@ -161,7 +162,7 @@ class ScanBarcodeComp extends Component {
       }
     );
   }
-
+  //alert before delete
   deleteDialog = (index) => {
     confirmAlert({
       title: "מחיקת מוצר",
@@ -202,31 +203,9 @@ class ScanBarcodeComp extends Component {
                 למוצרים שלי
               </button>
               <p></p>
+              {/*Quagga is button to start scaning*/}
               <Quagga scanBarcode={this.scanBarcode} />
             </Container>
-
-            {/* <div className="row">
-              <div className="col m-1 ">
-                <Link to={ROUTES.MY_PRODUCTS}>
-                  <button className="btn btn-primary m-1">
-                    עבור למוצרים שלי
-                  </button>
-                </Link>
-              </div>
-              <div className="col">
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => this.handleAdd()}
-                  disabled={this.state.isInvalid}
-                >
-                  הוסף למוצרים שלי
-                </button>
-              </div>
-              <div className="col">
-                <Quagga scanBarcode={this.scanBarcode} />
-              </div>
-            </div> */}
-
             <div className="row m-1">
               {this.state.newItems.length > 0 &&
                 this.state.newItems.map((item, index) => {

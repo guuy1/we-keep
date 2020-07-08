@@ -5,8 +5,8 @@ import { compose } from "recompose";
 import { withAuthorization, withEmailVerification } from "../Session";
 import { withFirebase } from "../Firebase";
 import Quagga from "quagga";
-// import Popup from "./Popup";
 
+//Quagga main button for scan
 const QuaggaComp = ({ scanBarcode }) => {
   return <QuaggaC scanBarcode={scanBarcode} />;
 };
@@ -20,12 +20,6 @@ class QuaggaReact extends Component {
     };
   }
 
-  // togglePopup = () => {
-  //   this.setState((prevState) => {
-  //     return { showPopup: !prevState.showPopup };
-  //   });
-  // };
-
   _scan = () => {
     this.setState((prevState) => {
       return { scanning: !prevState.scanning };
@@ -37,9 +31,7 @@ class QuaggaReact extends Component {
       if (item.ItemCode === result.codeResult.code) return item.ItemCode;
       return null;
     });
-    // this.setState((prevState) => {
-    //   return { showPopup: !prevState.showPopup };
-    // });
+
     if (res) {
       Quagga.stop();
       this.setState(
@@ -50,11 +42,6 @@ class QuaggaReact extends Component {
       );
     }
   };
-
-  // addItemCloseScan = () => {};
-  // addItemStayScan = () => {};
-  // closeScan = () => {};
-  // stayScan = () => {};
 
   render() {
     return (
@@ -67,13 +54,9 @@ class QuaggaReact extends Component {
         >
           {this.state.scanning ? "סיים סריקה" : "התחל סריקה"}
         </button>
-        {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}
-        {/* {this.state.showPopup ? (
-          <Popup
-            showPopup={this.state.showPopup}
-            togglePopup={this.togglePopup}
-          />
-        ) : null} */}
+        {this.state.scanning ? (
+          <Scanner onDetected={this._onDetected} scan={this._scan} />
+        ) : null}
       </div>
     );
   }

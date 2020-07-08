@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import Quagga from "quagga";
+import { confirmAlert } from "react-confirm-alert"; // Import
 
+//set camera for scanning and return result if found or not
 class Scanner extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timer: 0,
+    };
+  }
   componentDidMount() {
     Quagga.init(
       {
@@ -31,13 +39,41 @@ class Scanner extends Component {
       }
     );
     Quagga.onDetected(this._onDetected);
+    //set time out for scanning and close after 15 sec
+    this.setState(() => {
+      return {
+        timer: setTimeout(() => {
+          Quagga.stop();
+          this._scan();
+          confirmAlert({
+            title: "סריקה נכשלה",
+            message: "ייתכן והמוצר לא נמצא במאגר/שלא נסרק מוצר כ-15 שניות",
+            buttons: [
+              {
+                label: "סגור",
+                onClick: () => {},
+              },
+            ],
+          });
+        }, 15000),
+      };
+    });
   }
 
   componentWillUnmount() {
     Quagga.offDetected(this._onDetected);
   }
 
+  _scan = () => {
+    this.props.scan();
+  };
   _onDetected = (result) => {
+    clearTimeout(this.state.timer);
+    this.setState(() => {
+      return {
+        timer: 0,
+      };
+    });
     this.props.onDetected(result);
   };
 

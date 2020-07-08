@@ -1,13 +1,12 @@
 import React from "react";
 import { compose } from "recompose";
 import { PasswordForgetForm } from "../PasswordForget";
-//import PasswordChangeForm from "../PasswordChange";
 import {
   AuthUserContext,
   withAuthorization,
   withEmailVerification,
 } from "../Session";
-
+//Only an authorized user can access this page
 const AccountPage = () => (
   <AuthUserContext.Consumer>
     {(authUser) => (
@@ -16,7 +15,6 @@ const AccountPage = () => (
         <p>הכנס כתובת איימיל ואנו נשלח לך לינק לאיפוס סיסמא</p>
         <PasswordForgetForm />
         <hr />
-        {/* <PasswordChangeForm /> */}
       </div>
     )}
   </AuthUserContext.Consumer>

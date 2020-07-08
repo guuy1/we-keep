@@ -4,6 +4,7 @@
   width: 380px;
   position: center;
   margin: auto;
+  margin-bottom: 40px;
 
   @media screen and(max-width:800px) {
     width: 220px;
@@ -17,6 +18,7 @@
     font-size: 50px;
     text-align: center;
   }
+
   .sub {
     text-align: right;
     color: #1a8cff;
@@ -24,6 +26,7 @@
     font-family: "Amatic SC";
     direction: rtl;
   }
+
   .sub1 {
     text-align: right;
     color: #0073e6;
@@ -43,6 +46,7 @@
   .link {
     margin: auto;
   }
+
   // .button {
   //   min-width: 165px;
   //   width: auto;

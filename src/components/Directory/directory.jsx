@@ -5,6 +5,8 @@ import * as ROUTES from "../../constants/routes";
 import listImg from "../Data/list.jpg";
 import productsImg from "../Data/products.jpg";
 import scanImg from "../Data/scan.jpeg";
+
+//home page design
 class Directory extends React.Component {
   constructor() {
     super();

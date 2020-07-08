@@ -16,13 +16,14 @@ import { withAuthentication } from "../Session";
 import SearchBarcode from "../Barcode/SearchBarcode";
 import MyProducts from "../Barcode/MyProducts";
 import { GlobalStyle } from "../../global.styles";
+
+//Using the route we import differnt components
 const App = () => (
   <div>
     <Router>
       <div>
         <GlobalStyle />
         <Navigation />
-        {/* <hr /> */}
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
         <Route path={ROUTES.SIGN_IN} component={SignInPage} />

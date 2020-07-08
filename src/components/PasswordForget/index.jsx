@@ -3,8 +3,8 @@ import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 import FormInput from "../FormInput/FormInput";
 import CustomButton from "../CustomButton/CustomButton";
-
 import { P, ForgetPassLink } from "./PasswordForget.styles";
+
 const PasswordForgetPage = () => (
   <div>
     <h1>איפוס סיסמא</h1>

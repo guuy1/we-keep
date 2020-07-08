@@ -45,6 +45,7 @@ class TitleComp extends Component {
       }
     });
   }
+  //change title if user desire
   hendleTitle(e, authUser) {
     this.setState({ title: e.target.value }, () => {
       this.props.firebase.list(this.props.listKey).set({

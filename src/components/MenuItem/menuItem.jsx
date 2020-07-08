@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import "./menuItem.scss";
 
+//home page design
 const MenuItem = ({ title, imageUrl, subtitle, history, linkUrl }) => (
   <div className="menu-item" onClick={() => history.push(`${linkUrl}`)}>
     <div
