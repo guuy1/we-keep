@@ -5,7 +5,7 @@ import SignOutButton from "../SignOut";
 import "bootstrap/dist/css/bootstrap.css";
 import { AuthUserContext } from "../Session";
 // import * as ROLES from "../../constants/roles";
-import { ReactComponent as Logo } from "../Data/crown.svg";
+import { ReactComponent as Logo } from "../Data/logo.svg";
 
 import {
   HeaderContainer,
