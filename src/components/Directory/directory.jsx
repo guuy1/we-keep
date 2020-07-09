@@ -14,7 +14,7 @@ class Directory extends React.Component {
     this.state = {
       sections: [
         {
-          title: "סרוק מוצר",
+          title: "סרוק מוצרים",
           subtitle: "הוסף מוצר חדש ותוקפו",
           imageUrl: scanImg,
           id: 3,

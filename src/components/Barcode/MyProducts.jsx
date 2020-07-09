@@ -173,6 +173,7 @@ class BarcodeListComp extends Component {
           isLoading: false,
         });
 
+      //searching from 4 digits and more
       if (this.state.value.length > 3) {
         let currentItems = data.Items.Item.filter((item) => {
           return item.ItemCode.endsWith(value);
@@ -243,98 +244,104 @@ class BarcodeListComp extends Component {
 
             <div className="row m-1 items-container">
               {/*compare between product expiration date to real date and mark product in color by there state.
-              green for valid products, yellow for products that are about to be expiered and red for expiered products*/}
+              GREEN for valid products, YELLOW for products that are about to be expiered and RED for expiered products*/}
               {this.state.itemsList.length > 0 &&
-                this.state.itemsList.map((item, index) => {
-                  const now = new Date();
-                  const itemDate = new Date(item.expiredDate);
-                  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-                  const firstDate = new Date(itemDate);
-                  const secondDate = new Date(now);
-                  firstDate.setHours(0); // change time zone GMT/UTC +0 hours to handle on local time
+                this.state.itemsList
+                  .sort(
+                    (a, b) => new Date(a.expiredDate) - new Date(b.expiredDate)
+                  )
+                  .map((item, index) => {
+                    const now = new Date();
+                    const itemDate = new Date(item.expiredDate);
+                    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+                    const firstDate = new Date(itemDate);
+                    const secondDate = new Date(now);
+                    firstDate.setHours(0); // change time zone GMT/UTC +0 hours to handle on local time
 
-                  const diffDays = Math.ceil((firstDate - secondDate) / oneDay); //rounding up
+                    const diffDays = Math.ceil(
+                      (firstDate - secondDate) / oneDay
+                    ); //rounding up
 
-                  const isExpired = diffDays <= 0;
-                  const almostExpired = diffDays <= 3 && diffDays > 0;
-                  const liClasses = classNames({
-                    expired: isExpired,
-                    "almost-expired": almostExpired,
-                    "not-expired": !almostExpired && !isExpired,
-                    "item-width": true,
-                  });
-                  let daysLeft;
-                  if (diffDays === 0) {
-                    daysLeft = (
-                      <span className="days-left">
-                        {" "}
-                        <span>המוצר פג תוקף היום</span>
-                      </span>
+                    const isExpired = diffDays <= 0;
+                    const almostExpired = diffDays <= 3 && diffDays > 0;
+                    const liClasses = classNames({
+                      expired: isExpired,
+                      "almost-expired": almostExpired,
+                      "not-expired": !almostExpired && !isExpired,
+                      "item-width": true,
+                    });
+                    let daysLeft;
+                    if (diffDays === 0) {
+                      daysLeft = (
+                        <span className="days-left">
+                          {" "}
+                          <span>המוצר פג תוקף היום</span>
+                        </span>
+                      );
+                    } else if (diffDays === 1) {
+                      daysLeft = (
+                        <span className="days-left">
+                          {" "}
+                          <span>המוצר פג תוקף מחר</span>
+                        </span>
+                      );
+                    } else if (isExpired) {
+                      daysLeft = (
+                        <span className="days-left">
+                          {" "}
+                          <span>המוצר פג תוקף </span>
+                          <span>{Math.abs(diffDays)}</span>
+                          <span> ימים</span>
+                        </span>
+                      );
+                    } else {
+                      daysLeft = (
+                        <span className="days-left">
+                          {" "}
+                          <span>המוצר פג תוקף בעוד </span>
+                          <span>{diffDays}</span>
+                          <span> ימים</span>
+                        </span>
+                      );
+                    }
+                    return (
+                      <div key={index} className={liClasses}>
+                        <List celled>
+                          <List.Item>
+                            <Image
+                              avatar
+                              style={{ fontSize: 50 }}
+                              src={item.image}
+                              alt=""
+                            />
+                            <List.Content>
+                              <List.Header>מוצר:{item.title}</List.Header>
+                              ברקוד: {item.description}
+                              <InputStyle>
+                                <input
+                                  type="date"
+                                  id="start"
+                                  name="trip-start"
+                                  value={item.expiredDate || todayDate}
+                                  min={todayDate}
+                                  onChange={(event) =>
+                                    this.changeDate(event, item)
+                                  }
+                                />
+                              </InputStyle>
+                              {daysLeft}
+                              <ButtonStyle
+                                className="negative ui button "
+                                onClick={() => this.deleteDialog(index)}
+                              >
+                                <i className="fa fa-trash fa-lg"></i>
+                              </ButtonStyle>
+                            </List.Content>
+                          </List.Item>
+                        </List>
+                      </div>
                     );
-                  } else if (diffDays === 1) {
-                    daysLeft = (
-                      <span className="days-left">
-                        {" "}
-                        <span>המוצר פג תוקף מחר</span>
-                      </span>
-                    );
-                  } else if (isExpired) {
-                    daysLeft = (
-                      <span className="days-left">
-                        {" "}
-                        <span>המוצר פג תוקף </span>
-                        <span>{Math.abs(diffDays)}</span>
-                        <span> ימים</span>
-                      </span>
-                    );
-                  } else {
-                    daysLeft = (
-                      <span className="days-left">
-                        {" "}
-                        <span>המוצר פג תוקף בעוד </span>
-                        <span>{diffDays}</span>
-                        <span> ימים</span>
-                      </span>
-                    );
-                  }
-                  return (
-                    <div key={index} className={liClasses}>
-                      <List celled>
-                        <List.Item>
-                          <Image
-                            avatar
-                            style={{ fontSize: 50 }}
-                            src={item.image}
-                            alt=""
-                          />
-                          <List.Content>
-                            <List.Header>מוצר:{item.title}</List.Header>
-                            ברקוד: {item.description}
-                            <InputStyle>
-                              <input
-                                type="date"
-                                id="start"
-                                name="trip-start"
-                                value={item.expiredDate || todayDate}
-                                min={todayDate}
-                                onChange={(event) =>
-                                  this.changeDate(event, item)
-                                }
-                              />
-                            </InputStyle>
-                            {daysLeft}
-                            <ButtonStyle
-                              className="negative ui button "
-                              onClick={() => this.deleteDialog(index)}
-                            >
-                              <i className="fa fa-trash fa-lg"></i>
-                            </ButtonStyle>
-                          </List.Content>
-                        </List.Item>
-                      </List>
-                    </div>
-                  );
-                })}
+                  })}
             </div>
           </div>
         )}

@@ -161,6 +161,16 @@ class ScanBarcodeComp extends Component {
         });
       }
     );
+    confirmAlert({
+      title: "המוצרים התווספו בהצלחה",
+      message: "",
+      buttons: [
+        {
+          label: "סגור",
+          onClick: () => {},
+        },
+      ],
+    });
   }
   //alert before delete
   deleteDialog = (index) => {
@@ -185,7 +195,7 @@ class ScanBarcodeComp extends Component {
       <AuthUserContext.Consumer>
         {() => (
           <div id="content">
-            <h1 align="center">מוצרים שנסרקו</h1>
+            <h1 align="center">סריקת מוצרים</h1>
             <Container textAlign="center">
               <Link to={ROUTES.MY_PRODUCTS}>
                 <button className="btn btn-primary">
