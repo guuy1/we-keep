@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Quagga from "quagga";
 import { confirmAlert } from "react-confirm-alert"; // Import
+import "./Scanner.scss";
 
 //set camera for scanning and return result if found or not
 class Scanner extends Component {
@@ -61,6 +62,7 @@ class Scanner extends Component {
   }
 
   componentWillUnmount() {
+    Quagga.offDetected(this._onDetected);
     Quagga.stop();
     clearTimeout(this.state.timer);
     this.setState(() => {
